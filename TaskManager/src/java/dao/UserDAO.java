@@ -1,7 +1,7 @@
 package dao;
 
 import java.sql.*;
-import model.User;
+import model.UserLogin;
 
 /**
  * Data Access Object (DAO) for managing User operations in the database.
@@ -19,7 +19,7 @@ public class UserDAO {
      *
      * @param user The User object to insert.
      */
-    public void insertUser(User user) {
+    public void insertUserLogin(UserLogin user) {
         String query = "INSERT INTO [dbo].[UserLogin]"
                 + "([user_uid], [username], [email], [password]) "
                 + "VALUES (?,?,?,?)";
