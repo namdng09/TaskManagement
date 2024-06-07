@@ -4,6 +4,7 @@ import dao.UserDAO;
 import org.mindrot.jbcrypt.BCrypt;
 import utility.Utility;
 import utility.Validation;
+import java.sql.*;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -147,5 +148,23 @@ public class UserLogin {
         UserLogin user = new UserLogin(user_uid, username, email, hashedPassword);
 
         dao.insertUserLogin(user);
+    }
+    
+    public boolean checkValidLogin(String username, String password) {
+        UserDAO dao = new UserDAO();
+        boolean flag = false;
+        try {
+            ResultSet rs = dao.getUserByUsername(username);
+            if (rs.next()) {
+                String hashedPassword = rs.getString("password");
+                if (BCrypt.checkpw(password, hashedPassword)) {
+                    flag = true;
+                }
+            }
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+        return flag;
     }
 }
