@@ -8,9 +8,12 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.UserLogin;
 
 /**
  *
@@ -66,7 +69,32 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        UserLogin userLogin = new UserLogin();
+
+        String username = request.getParameter("name");
+        String password = request.getParameter("password");
+        String status;
+        String message;
+
+        Cookie userCookie = new Cookie("name", username);
+        Cookie passCookie = new Cookie("pass", password);
+
+        userCookie.setMaxAge(60 * 60 * 24);
+        passCookie.setMaxAge(60 * 60 * 24);
+
+        response.addCookie(userCookie);
+        response.addCookie(passCookie);
+
+        if (!userLogin.checkValidLogin(username, password)) {
+            status = "error";
+            message = "username or password is not correct!";
+            request.setAttribute(status, message);
+            request.getRequestDispatcher("login").forward(request, response);
+        } else {
+            HttpSession section = request.getSession();
+            //section.setAttribute("account", );
+
+        }
     }
 
     /** 
