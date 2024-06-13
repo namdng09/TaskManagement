@@ -167,4 +167,23 @@ public class UserLogin {
         }
         return flag;
     }
+
+    public UserLogin getAccountByUsername(String username) {
+        UserDAO dao = new UserDAO();
+        UserLogin acc = null;
+        try {
+            ResultSet rs = dao.getUserByUsername(username);
+            if (rs.next()) {
+                String user_uid = rs.getString("user_uid");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                acc = new UserLogin(user_uid, username, email, password);
+            }
+        } catch (Exception e) {
+            //TODO: handle exception
+            System.out.println("ERROR" + e.getMessage());
+        }
+        return acc;
+    }
 }
