@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +13,14 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h2>LOGIN FORM</h2>
+        <h3 style="color: red">${requestScope.error}</h3>
+        <form action="login" method="post">
+            <label for="username">Username: </label>
+            <input type="text" name="name" id="username" required><br><br>
+            <label for="password">Password: </label>
+            <input type="text" name="pass" id="password" required><br><br>
+            <input type="submit" name="Save">
+        </form>
     </body>
 </html>
