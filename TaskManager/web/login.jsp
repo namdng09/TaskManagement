@@ -15,12 +15,13 @@
     <body>
         <h2>LOGIN FORM</h2>
         <h3 style="color: red">${requestScope.error}</h3>
+        <c:set var="cookie" value="${pageContext.request.cookies}"/>
         <form action="login" method="post">
             <label for="username">Username: </label>
-            <input type="text" name="name" id="username" required><br><br>
+            <input type="text" name="name" id="username" value="${cookie.cname.value}" required><br><br>
             <label for="password">Password: </label>
-            <input type="text" name="pass" id="password" required><br><br>
-            <input type="checkbox" name="rem" id="remember" value="ON"><br><br>
+            <input type="text" name="pass" id="password" value="${cookie.cpass.value}" required><br><br>
+            <input type="checkbox" ${(cookie.crem!=null?'checked':'')} name="rem" id="remember" value="ON"><br><br>
             <label for="remember">Remember</label>
             <input type="submit" name="Login">
         </form>
