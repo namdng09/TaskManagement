@@ -11,13 +11,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.UserLogin;
 
 /**
  *
  * @author namdng09
  */
-public class RegisterServlet extends HttpServlet {
+public class HomeServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,10 +33,10 @@ public class RegisterServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RegisterServlet</title>");  
+            out.println("<title>Servlet HomeServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RegisterServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet HomeServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -54,8 +53,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        request.getRequestDispatcher("register.jsp").forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 
@@ -68,32 +66,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-
-        UserLogin user = new UserLogin();
-
-        String message;
-        String status;
-        String username = request.getParameter("name");
-        String email = request.getParameter("email");
-        String password = request.getParameter("pass");
-        
-        try {
-            user.checkValidEmail(email);
-            user.checkValidUserName(username);
-            user.checkValidPassword(password);
-
-            user.registerUser(username, email, password);
-
-            response.sendRedirect("login");
-        } catch (Exception e) {
-            //TODO: handle exception
-            status = "error";
-            message = e.getMessage();
-            request.setAttribute(status, message);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        }
-
+        processRequest(request, response);
     }
 
     /** 
