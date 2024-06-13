@@ -20,7 +20,9 @@
             <input type="text" name="name" id="username" required><br><br>
             <label for="password">Password: </label>
             <input type="text" name="pass" id="password" required><br><br>
-            <input type="submit" name="Save">
+            <input type="checkbox" name="rem" id="remember" value="ON"><br><br>
+            <label for="remember">Remember</label>
+            <input type="submit" name="Login">
         </form>
     </body>
 </html>
