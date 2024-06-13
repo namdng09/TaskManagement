@@ -19,7 +19,7 @@ public class DBContext {
     private static final String DB_URL = "jdbc:sqlserver://";
     private static final String SERVER_NAME = "localhost";
     private static final String PORT_NUMBER = "1433";
-    private static final String DB_NAME = "TaskManager";
+    private static final String DB_NAME = "TaskManagement";
     private static final String USER = "sa";
     private static final String PASSWORD = "123";
 
