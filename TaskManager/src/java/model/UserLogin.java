@@ -86,7 +86,7 @@ public class UserLogin {
             throw new Exception(message);
         }
         if (dao.isExistUserName(username)) {
-            message = "username already existed!";
+            message = "username is already existed!";
             throw new Exception(message);
         }
     }
@@ -104,11 +104,11 @@ public class UserLogin {
 
         String message;
         if (!validate.isValidSyntaxEmail(email)) {
-            message = "email is not valid!";
+            message = "Email is not valid!";
             throw new Exception(message);
         }
         if (dao.isExistUserName(email)) {
-            message = "email already existed!";
+            message = "Email is already existed!";
             throw new Exception(message);
         }
     }
@@ -123,7 +123,7 @@ public class UserLogin {
         Validation validate = new Validation();
         String message;
         if (!validate.isValidSyntaxPassword(password)) {
-            message = "email is not valid!";
+            message = "Password is not valid!";
             throw new Exception(message);
         }
     }
