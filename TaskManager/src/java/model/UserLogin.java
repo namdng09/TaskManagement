@@ -107,7 +107,7 @@ public class UserLogin {
             message = "Email is not valid!";
             throw new Exception(message);
         }
-        if (dao.isExistUserName(email)) {
+        if (dao.isExistEmail(email)) {
             message = "Email is already existed!";
             throw new Exception(message);
         }
