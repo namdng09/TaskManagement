@@ -4,6 +4,7 @@ import dao.UserDAO;
 import org.mindrot.jbcrypt.BCrypt;
 import utility.Utility;
 import utility.Validation;
+import java.sql.*;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -85,7 +86,7 @@ public class UserLogin {
             throw new Exception(message);
         }
         if (dao.isExistUserName(username)) {
-            message = "username already existed!";
+            message = "username is already existed!";
             throw new Exception(message);
         }
     }
@@ -103,11 +104,11 @@ public class UserLogin {
 
         String message;
         if (!validate.isValidSyntaxEmail(email)) {
-            message = "email is not valid!";
+            message = "Email is not valid!";
             throw new Exception(message);
         }
-        if (dao.isExistUserName(email)) {
-            message = "email already existed!";
+        if (dao.isExistEmail(email)) {
+            message = "Email is already existed!";
             throw new Exception(message);
         }
     }
@@ -122,7 +123,7 @@ public class UserLogin {
         Validation validate = new Validation();
         String message;
         if (!validate.isValidSyntaxPassword(password)) {
-            message = "email is not valid!";
+            message = "Password is not valid!";
             throw new Exception(message);
         }
     }
@@ -147,5 +148,42 @@ public class UserLogin {
         UserLogin user = new UserLogin(user_uid, username, email, hashedPassword);
 
         dao.insertUserLogin(user);
+    }
+    
+    public boolean checkValidLogin(String username, String password) {
+        UserDAO dao = new UserDAO();
+        boolean flag = false;
+        try {
+            ResultSet rs = dao.getUserByUsername(username);
+            if (rs.next()) {
+                String hashedPassword = rs.getString("password");
+                if (BCrypt.checkpw(password, hashedPassword)) {
+                    flag = true;
+                }
+            }
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+        return flag;
+    }
+
+    public UserLogin getAccountByUsername(String username) {
+        UserDAO dao = new UserDAO();
+        UserLogin acc = null;
+        try {
+            ResultSet rs = dao.getUserByUsername(username);
+            if (rs.next()) {
+                String uid = rs.getString("user_uid");
+                String userName = rs.getString("username");
+                String userEmail = rs.getString("email");
+                String userPassword = rs.getString("password");
+                acc = new UserLogin(uid, userName, userEmail, userPassword);
+            }
+        } catch (Exception e) {
+            //TODO: handle exception
+            System.out.println("ERROR" + e.getMessage());
+        }
+        return acc;
     }
 }

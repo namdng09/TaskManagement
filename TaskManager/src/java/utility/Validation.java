@@ -13,7 +13,14 @@ import java.util.regex.Pattern;
  * 
  * @author namdng09
  */
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 public class Validation {
+    
+    private static final String USERNAME_REGEX = "^(?!-)(?!.*--)[a-zA-Z0-9-]{4,20}(?<!-)$";
+    private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+    private static final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&*+=])(?=\\S+$).{8,}$";
     
     /**
      * Checks if the provided username has valid syntax.
@@ -22,20 +29,12 @@ public class Validation {
      * @return true if the username is valid, false otherwise.
      */
     public boolean isValidSyntaxUsername(String username) {
-        boolean flag = true;
-        // username do not start-end with the hyphen and contain multiple hyphen
-        // Only allows alphanumberic characters and single hyphen
+        // Username must not start or end with a hyphen and contain multiple hyphens
+        // Only allows alphanumeric characters and single hyphens
         // Length of username should be min = 4, max = 20
-        String regex = "^(?!-)(?!.*--)[a-zA-Z0-9-]{4,20}(?<!-)$";
-        
-        Pattern pattern = Pattern.compile(regex);
-        
+        Pattern pattern = Pattern.compile(USERNAME_REGEX);
         Matcher matcher = pattern.matcher(username);
-        
-        if (!matcher.matches()) {
-            flag = false;
-        }
-        return flag;
+        return matcher.matches();
     }
     
     /**
@@ -45,21 +44,13 @@ public class Validation {
      * @return true if the email is valid, false otherwise.
      */
     public boolean isValidSyntaxEmail(String email) {
-        boolean flag = true;
-        // Starts with alphanumeric characters or allowed special characters.
-        // Contains a single '@' symbol.
-        // Has a valid domain with at least one dot.
-        // The top level domain must be at least 2 characters long.
-        String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-        
-        Pattern pattern = Pattern.compile(regex);
-        
+        // Email must start with alphanumeric characters or allowed special characters.
+        // Must contain a single '@' symbol.
+        // Must have a valid domain with at least one dot.
+        // The top-level domain must be at least 2 characters long.
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(email);
-        
-        if (!matcher.matches()) {
-            flag = false;
-        }
-        return flag;
+        return matcher.matches();
     }
 
     /**
@@ -69,19 +60,12 @@ public class Validation {
      * @return true if the password is valid, false otherwise.
      */
     public boolean isValidSyntaxPassword(String password) {
-        boolean flag = true;
-        // The password must be at least 8 characters long
-        // Ensure there are no space characters
-        // password must contain digit, letter, special characters.
-        String regex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&*+=])(?=\\S+$).{8,}$";
-        
-        Pattern pattern = Pattern.compile(regex);
-        
+        // Password must be at least 8 characters long.
+        // Must not contain space characters.
+        // Must contain at least one digit, one letter, and one special character.
+        Pattern pattern = Pattern.compile(PASSWORD_REGEX);
         Matcher matcher = pattern.matcher(password);
-        
-        if (!matcher.matches()) {
-            flag = false;
-        }
-        return flag;
+        return matcher.matches();
     }
 }
+

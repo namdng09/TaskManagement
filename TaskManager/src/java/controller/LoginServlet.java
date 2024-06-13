@@ -8,16 +8,18 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.UserLogin;
 
 /**
  *
  * @author namdng09
  */
-public class RegisterServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,10 +36,10 @@ public class RegisterServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RegisterServlet</title>");  
+            out.println("<title>Servlet LoginServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RegisterServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet LoginServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -54,8 +56,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        request.getRequestDispatcher("register.jsp").forward(request, response);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     } 
 
     /** 
@@ -68,32 +69,43 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
+        UserLogin userLogin = new UserLogin();
 
-        UserLogin user = new UserLogin();
-
-        String message;
-        String status;
         String username = request.getParameter("name");
-        String email = request.getParameter("email");
         String password = request.getParameter("pass");
-        
-        try {
-            user.checkValidEmail(email);
-            user.checkValidUserName(username);
-            user.checkValidPassword(password);
+        String rem = request.getParameter("rem");
+        String status;
+        String message;
 
-            user.registerUser(username, email, password);
+        Cookie userCookie = new Cookie("cname", username);
+        Cookie passCookie = new Cookie("cpass", password);
+        Cookie remCookie = new Cookie("crem", password);
 
-            response.sendRedirect("login");
-        } catch (Exception e) {
-            //TODO: handle exception
-            status = "error";
-            message = e.getMessage();
-            request.setAttribute(status, message);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+        if (rem != null) {
+            userCookie.setMaxAge(60 * 60 * 24);
+            passCookie.setMaxAge(60 * 60 * 24);
+            remCookie.setMaxAge(60 * 60 * 24);
+        } else {
+            userCookie.setMaxAge(0);
+            passCookie.setMaxAge(0);
+            remCookie.setMaxAge(0);
         }
 
+        response.addCookie(userCookie);
+        response.addCookie(passCookie);
+        response.addCookie(remCookie);
+
+        if (!userLogin.checkValidLogin(username, password)) {
+            status = "error";
+            message = "username or password is not correct!";
+            request.setAttribute(status, message);
+            request.getRequestDispatcher("login").forward(request, response);
+        } else {
+            userLogin = userLogin.getAccountByUsername(username);
+            HttpSession section = request.getSession();
+            section.setAttribute("account", userLogin);
+            response.sendRedirect("index.html");
+        }
     }
 
     /** 
