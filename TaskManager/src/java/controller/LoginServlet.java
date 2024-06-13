@@ -72,18 +72,28 @@ public class LoginServlet extends HttpServlet {
         UserLogin userLogin = new UserLogin();
 
         String username = request.getParameter("name");
-        String password = request.getParameter("password");
+        String password = request.getParameter("pass");
+        String rem = request.getParameter("rem");
         String status;
         String message;
 
-        Cookie userCookie = new Cookie("name", username);
-        Cookie passCookie = new Cookie("pass", password);
+        Cookie userCookie = new Cookie("cname", username);
+        Cookie passCookie = new Cookie("cpass", password);
+        Cookie remCookie = new Cookie("crem", password);
 
-        userCookie.setMaxAge(60 * 60 * 24);
-        passCookie.setMaxAge(60 * 60 * 24);
+        if (rem != null) {
+            userCookie.setMaxAge(60 * 60 * 24);
+            passCookie.setMaxAge(60 * 60 * 24);
+            remCookie.setMaxAge(60 * 60 * 24);
+        } else {
+            userCookie.setMaxAge(0);
+            passCookie.setMaxAge(0);
+            remCookie.setMaxAge(0);
+        }
 
         response.addCookie(userCookie);
         response.addCookie(passCookie);
+        response.addCookie(remCookie);
 
         if (!userLogin.checkValidLogin(username, password)) {
             status = "error";
