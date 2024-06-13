@@ -101,9 +101,10 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute(status, message);
             request.getRequestDispatcher("login").forward(request, response);
         } else {
+            userLogin = userLogin.getAccountByUsername(username);
             HttpSession section = request.getSession();
-            //section.setAttribute("account", );
-
+            section.setAttribute("account", userLogin);
+            response.sendRedirect("index.html");
         }
     }
 
