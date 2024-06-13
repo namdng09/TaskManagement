@@ -21,9 +21,9 @@
             <input type="text" name="name" id="username" value="${cookie.cname.value}" required><br><br>
             <label for="password">Password: </label>
             <input type="text" name="pass" id="password" value="${cookie.cpass.value}" required><br><br>
-            <input type="checkbox" ${(cookie.crem!=null?'checked':'')} name="rem" id="remember" value="ON"><br><br>
-            <label for="remember">Remember</label>
-            <input type="submit" name="Login">
+            <input type="checkbox" ${(cookie.crem!=null?'checked':'')} name="rem" id="remember" value="ON">
+            <label for="remember">Remember</label><br><br>
+            <input type="submit" value="Login">
         </form>
     </body>
 </html>
