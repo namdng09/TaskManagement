@@ -174,11 +174,11 @@ public class UserLogin {
         try {
             ResultSet rs = dao.getUserByUsername(username);
             if (rs.next()) {
-                String user_uid = rs.getString("user_uid");
-                String username = rs.getString("username");
-                String email = rs.getString("email");
-                String password = rs.getString("password");
-                acc = new UserLogin(user_uid, username, email, password);
+                String uid = rs.getString("user_uid");
+                String userName = rs.getString("username");
+                String userEmail = rs.getString("email");
+                String userPassword = rs.getString("password");
+                acc = new UserLogin(uid, userName, userEmail, userPassword);
             }
         } catch (Exception e) {
             //TODO: handle exception
