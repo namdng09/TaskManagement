@@ -82,6 +82,10 @@ public class RegisterServlet extends HttpServlet {
             user.checkValidEmail(email);
             user.checkValidUserName(username);
             user.checkValidPassword(password);
+
+            user.registerUser(username, email, password);
+
+            response.sendRedirect("login");
         } catch (Exception e) {
             //TODO: handle exception
             status = "error";
@@ -90,9 +94,6 @@ public class RegisterServlet extends HttpServlet {
             request.getRequestDispatcher("register.jsp").forward(request, response);
         }
 
-        user.registerUser(username, email, password);
-
-        response.sendRedirect("login");
     }
 
     /** 
