@@ -54,7 +54,8 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        request.getRequestDispatcher("register.jsp").forward(request, response);
     } 
 
     /** 
@@ -78,22 +79,20 @@ public class RegisterServlet extends HttpServlet {
         String password = request.getParameter("pass");
         
         try {
-            user.checkValidUserName(username);
             user.checkValidEmail(email);
+            user.checkValidUserName(username);
             user.checkValidPassword(password);
         } catch (Exception e) {
             //TODO: handle exception
             status = "error";
-            request.setAttribute(status, e.getMessage());
-            request.getRequestDispatcher("register.html").forward(request, response);
+            message = e.getMessage();
+            request.setAttribute(status, message);
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
 
         user.registerUser(username, email, password);
 
-        status = "success";
-        message = "Register successfully. Please login!";
-        request.setAttribute(status, message);
-        request.getRequestDispatcher("login.html").forward(request, response);
+        response.sendRedirect("login");
     }
 
     /** 
