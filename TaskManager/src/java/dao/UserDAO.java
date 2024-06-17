@@ -21,7 +21,7 @@ public class UserDAO {
      */
     public void insertUserLogin(UserLogin user) {
         String query = "INSERT INTO [dbo].[UserLogin]"
-                + "([user_uid], [username], [email], [password]) "
+                + "([User_UID], [UserName], [Email], [Password]) "
                 + "VALUES (?,?,?,?)";
         try (PreparedStatement pstmt = createPreparedStatement(query)) {
             pstmt.setString(1, user.getUserUID());
@@ -42,7 +42,7 @@ public class UserDAO {
      * @param username The username of the user to delete.
      */
     public void deleteUserByUsername(String username) {
-        String query = "DELETE FROM [dbo].[UserLogin] WHERE [username] = ?";
+        String query = "DELETE FROM [dbo].[UserLogin] WHERE [UserName] = ?";
 
         try (PreparedStatement pstmt = createPreparedStatement(query)) {
             pstmt.setString(1, username);
@@ -64,7 +64,7 @@ public class UserDAO {
      */
     public ResultSet getUserByUsername(String username) throws SQLException {
         String query = "SELECT * FROM [dbo].[UserLogin] WHERE "
-                + "[username] = ? ";
+                + "[UserName] = ? ";
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
         pstmt.setString(1, username);
@@ -81,7 +81,7 @@ public class UserDAO {
      */
     public ResultSet getUserByEmail(String email) throws SQLException{
         String query = "SELECT * FROM [dbo].[UserLogin] WHERE "
-                + "[email] = ? ";
+                + "[Email] = ? ";
         PreparedStatement pstmt = createPreparedStatement(query);
         pstmt.setString(1, email);
         return executeQuery(pstmt);
