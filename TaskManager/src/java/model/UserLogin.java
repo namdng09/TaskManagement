@@ -82,11 +82,11 @@ public class UserLogin {
 
         String message;
         if (!validate.isValidSyntaxUsername(username)) {
-            message = "username is not valid!";
+            message = "Username is not valid!";
             throw new Exception(message);
         }
         if (dao.isExistUserName(username)) {
-            message = "username is already existed!";
+            message = "Username is already existed!";
             throw new Exception(message);
         }
     }
