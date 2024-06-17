@@ -111,7 +111,7 @@ public class LoginFilter implements Filter {
         String path = req.getRequestURI().substring(req.getContextPath().length());
 
         // If user don't log in, they only access to /aboutUs, /login, /register
-        if ((!path.equals("/login")) && (!path.equals("/register"))) {
+        if ((!path.equals("/login")) && (!path.equals("/register")) && (!path.equals("/"))) {
             HttpSession session = req.getSession(false);
             if (session == null || session.getAttribute("account") == null) {
                 res.sendRedirect("login");
