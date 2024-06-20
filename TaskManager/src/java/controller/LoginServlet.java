@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -99,7 +100,7 @@ public class LoginServlet extends HttpServlet {
             status = "error";
             message = "username or password is not correct!";
             request.setAttribute(status, message);
-            request.getRequestDispatcher("login").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             userLogin = userLogin.getAccountByUsername(username);
             HttpSession section = request.getSession();
@@ -116,5 +117,4 @@ public class LoginServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
