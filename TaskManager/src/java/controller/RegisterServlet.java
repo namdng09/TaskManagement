@@ -11,7 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.UserLogin;
+import model.User;
 
 /**
  *
@@ -70,7 +70,7 @@ public class RegisterServlet extends HttpServlet {
     throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        UserLogin user = new UserLogin();
+        User user = new User();
 
         String message;
         String status;

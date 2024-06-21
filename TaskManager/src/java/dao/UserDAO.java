@@ -1,7 +1,7 @@
 package dao;
 
 import java.sql.*;
-import model.UserLogin;
+import model.User;
 
 /**
  * Data Access Object (DAO) for managing User operations in the database.
@@ -19,8 +19,8 @@ public class UserDAO {
      *
      * @param user The User object to insert.
      */
-    public void insertUserLogin(UserLogin user) {
-        String query = "INSERT INTO [dbo].[UserLogin]"
+    public void insertUser(User user) {
+        String query = "INSERT INTO [dbo].[User]"
                 + "([User_UID], [UserName], [Email], [Password]) "
                 + "VALUES (?,?,?,?)";
         try (PreparedStatement pstmt = createPreparedStatement(query)) {
@@ -42,7 +42,7 @@ public class UserDAO {
      * @param username The username of the user to delete.
      */
     public void deleteUserByUsername(String username) {
-        String query = "DELETE FROM [dbo].[UserLogin] WHERE [UserName] = ?";
+        String query = "DELETE FROM [dbo].[User] WHERE [UserName] = ?";
 
         try (PreparedStatement pstmt = createPreparedStatement(query)) {
             pstmt.setString(1, username);
@@ -63,7 +63,7 @@ public class UserDAO {
      * @throws java.sql.SQLException
      */
     public ResultSet getUserByUsername(String username) throws SQLException {
-        String query = "SELECT * FROM [dbo].[UserLogin] WHERE "
+        String query = "SELECT * FROM [dbo].[User] WHERE "
                 + "[UserName] = ? ";
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
@@ -80,7 +80,7 @@ public class UserDAO {
      * @throws java.sql.SQLException
      */
     public ResultSet getUserByEmail(String email) throws SQLException{
-        String query = "SELECT * FROM [dbo].[UserLogin] WHERE "
+        String query = "SELECT * FROM [dbo].[User] WHERE "
                 + "[Email] = ? ";
         PreparedStatement pstmt = createPreparedStatement(query);
         pstmt.setString(1, email);
