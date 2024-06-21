@@ -17,6 +17,9 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -25,6 +28,8 @@ import jakarta.servlet.http.HttpSession;
 public class LoginFilter implements Filter {
 
     private static final boolean debug = true;
+    private List<String> excludedUrls;
+    
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -110,11 +115,26 @@ public class LoginFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         String path = req.getRequestURI().substring(req.getContextPath().length());
 
-        // If user don't log in, they only access to /aboutUs, /login, /register
-        if ((!path.equals("/login")) && (!path.equals("/register")) && (!path.equals("/"))) {
+        // Bypass filter for excluded URLs
+        for (String excludedUrl : excludedUrls) {
+            if (path.startsWith(excludedUrl)) {
+                if (debug) {
+                    log("Bypassing filter for path: " + path);
+                }
+                chain.doFilter(request, response);
+                return;
+            }
+        }
+
+        // If user hasn't logged in, they can only access /aboutUs, /login, /register, or /
+        if (!path.equals("/login") && !path.equals("/register") && !path.equals("/")) {
             HttpSession session = req.getSession(false);
             if (session == null || session.getAttribute("account") == null) {
-                res.sendRedirect("login");
+                if (debug) {
+                    log("Redirecting to login for path: " + path);
+                }
+                res.sendRedirect(req.getContextPath() + "/login");
+                return;
             }
         }
 
@@ -169,11 +189,19 @@ public class LoginFilter implements Filter {
     /**
      * Init method for this filter
      */
-    public void init(FilterConfig filterConfig) {
+    public void init(FilterConfig filterConfig) throws ServletException{
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("LoginFilter:Initializing filter");
+                log("LoginFilter: Initializing filter");
+            }
+            String excludedUrlString = filterConfig.getInitParameter("excludedUrls");
+            if (excludedUrlString != null && !excludedUrlString.isEmpty()) {
+                excludedUrls = Arrays.asList(excludedUrlString.split(","));
+                log("Excluded URLs: " + excludedUrls);
+            } else {
+                excludedUrls = Collections.emptyList();
+                log("No excluded URLs provided");
             }
         }
     }
