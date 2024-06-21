@@ -37,9 +37,9 @@
                         <p>Access to the most powerfull tool in the entire design and web industry.</p>
                         <h5 style="color: red">${requestScope.error}</h5>
                         <form action="login" method="post">
-                            <input class="form-control" type="text" name="username" placeholder="E-mail Address"
+                            <input class="form-control" type="text" name="name" placeholder="Username"
                                 required>
-                            <input class="form-control" type="password" name="password" placeholder="Password" required>
+                            <input class="form-control" type="password" name="pass" placeholder="Password" required>
                             <div class="form-button">
                                 <button id="submit" type="submit" class="ibtn">Login</button> <a
                                     href="forget25.html">Forget password?</a>

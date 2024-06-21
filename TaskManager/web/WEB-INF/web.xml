@@ -7,6 +7,10 @@
     <filter>
         <filter-name>LoginFilter</filter-name>
         <filter-class>filter.LoginFilter</filter-class>
+        <init-param>
+            <param-name>excludedUrls</param-name>
+            <param-value>/webfonts,/css,/js,/images,/login,/register</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
