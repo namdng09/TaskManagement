@@ -35,14 +35,16 @@
                     <div class="form-items">
                         <h3>Login to account</h3>
                         <p>Access to the most powerfull tool in the entire design and web industry.</p>
+                        <div class="page-links">
+                            <a href="login" class="active">Login</a><a href="register">Register</a>
+                        </div>
                         <h5 style="color: red">${requestScope.error}</h5>
                         <form action="login" method="post">
                             <input class="form-control" type="text" name="name" placeholder="Username"
                                 required>
                             <input class="form-control" type="password" name="pass" placeholder="Password" required>
                             <div class="form-button">
-                                <button id="submit" type="submit" class="ibtn">Login</button> <a
-                                    href="forget25.html">Forget password?</a>
+                                <button id="submit" type="submit" class="ibtn">Login</button>
                             </div>
                         </form>
                         <div class="other-links">
