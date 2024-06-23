@@ -21,13 +21,17 @@ public class UserDAO {
      */
     public void insertUser(User user) {
         String query = "INSERT INTO [dbo].[User]"
-                + "([User_UID], [UserName], [Email], [Password]) "
-                + "VALUES (?,?,?,?)";
+                + "([User_UID],[UserName],[Email],[Password],[FirstName],[LastName],[BirthDate],[Phone])"
+                + "VALUES (?,?,?,?,?,?,?,?)";
         try (PreparedStatement pstmt = createPreparedStatement(query)) {
             pstmt.setString(1, user.getUserUID());
             pstmt.setString(2, user.getUsername());
             pstmt.setString(3, user.getEmail());
             pstmt.setString(4, user.getPassword());
+            pstmt.setString(5, user.getFirstName());
+            pstmt.setString(6, user.getLastName());
+            pstmt.setDate(7, user.getBirthDate());
+            pstmt.setString(8, user.getPhoneNumber());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
