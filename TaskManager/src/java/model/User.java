@@ -20,17 +20,24 @@ public class User{
     private String username;
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
+    private Date birthDate;
+    private String phoneNumber;
 
     public User() {
     }
 
-    public User(String userUID, String username, String email, String password) {
+    public User(String userUID, String username, String email, String password, String firstName, String lastName, Date birthDate, String phoneNumber) {
         this.userUID = userUID;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
     }
-
 
     public String getUserUID() {
         return userUID;
@@ -64,6 +71,38 @@ public class User{
         this.email = email;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public String toString() {
         return "User{" + "userUID=" + userUID + ", username=" + username + ", password=" + password + ", email=" + email + '}';
@@ -87,6 +126,15 @@ public class User{
         }
         if (dao.isExistUserName(username)) {
             message = "Username is already existed!";
+            throw new Exception(message);
+        }
+    }
+    public void checkValidPhoneNumber(String phone) throws Exception{
+        Validation validate = new Validation();
+        String message;
+
+        if (!validate.isValidSyntaxPhoneNumber(phone)) {
+            message = "Phone number is not valid!";
             throw new Exception(message);
         }
     }
@@ -136,7 +184,7 @@ public class User{
      * @param email The email address for the new user.
      * @param password The password for the new user.
      */
-    public void registerUser(String username, String email, String password) {
+    public void registerUser(String username, String email, String password, String firstName, String lastName, Date birthDate, String phoneNumber) {
         Utility utils = new Utility();
         UserDAO dao = new UserDAO();
 
@@ -145,7 +193,7 @@ public class User{
         // Using BCrypt to make hashing password convenient
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(13));
 
-        User user = new User(user_uid, username, email, hashedPassword);
+        User user = new User(user_uid, username, email, hashedPassword, firstName, lastName, birthDate, phoneNumber);
 
         dao.insertUser(user);
     }
@@ -156,7 +204,7 @@ public class User{
         try {
             ResultSet rs = dao.getUserByUsername(username);
             if (rs.next()) {
-                String hashedPassword = rs.getString("password");
+                String hashedPassword = rs.getString("Password");
                 if (BCrypt.checkpw(password, hashedPassword)) {
                     flag = true;
                 }
@@ -174,11 +222,15 @@ public class User{
         try {
             ResultSet rs = dao.getUserByUsername(username);
             if (rs.next()) {
-                String uid = rs.getString("user_uid");
-                String userName = rs.getString("username");
-                String userEmail = rs.getString("email");
-                String userPassword = rs.getString("password");
-                acc = new User(uid, userName, userEmail, userPassword);
+                String uid = rs.getString("User_UID");
+                String userName = rs.getString("Username");
+                String userEmail = rs.getString("Email");
+                String userPassword = rs.getString("Password");
+                String userFirstName = rs.getString("FirstName");
+                String userLastName  = rs.getString("LastName");
+                Date userBirthDate = rs.getDate("BirthDate");
+                String userPhoneNumber = rs.getString("Phone");
+                acc = new User(uid, userName, userEmail, userPassword, userFirstName, userLastName, userBirthDate, userPhoneNumber);
             }
         } catch (Exception e) {
             //TODO: handle exception
