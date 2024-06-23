@@ -21,6 +21,7 @@ public class Validation {
     private static final String USERNAME_REGEX = "^(?!-)(?!.*--)[a-zA-Z0-9-]{4,20}(?<!-)$";
     private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
     private static final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&*+=])(?=\\S+$).{8,}$";
+    private static final String PHONE_REGEX = "^[\\d]{10}$";
     
     /**
      * Checks if the provided username has valid syntax.
@@ -65,6 +66,21 @@ public class Validation {
         // Must contain at least one digit, one letter, and one special character.
         Pattern pattern = Pattern.compile(PASSWORD_REGEX);
         Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+    
+    /**
+     * Checks if the provided phone number has valid syntax.
+     *
+     * @param password the phone number to validate.
+     * @return true if the phone number is valid, false otherwise.
+     */
+    public boolean isValidSyntaxPhoneNumber(String phoneNumber) {
+        // Password must be at least 8 characters long.
+        // Must not contain space characters.
+        // Must contain at least one digit, one letter, and one special character.
+        Pattern pattern = Pattern.compile(PHONE_REGEX);
+        Matcher matcher = pattern.matcher(phoneNumber);
         return matcher.matches();
     }
 }
