@@ -13,8 +13,6 @@ import java.util.regex.Pattern;
  * 
  * @author namdng09
  */
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 public class Validation {
     
@@ -22,6 +20,7 @@ public class Validation {
     private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
     private static final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&*+=])(?=\\S+$).{8,}$";
     private static final String PHONE_REGEX = "^[\\d]{10}$";
+    private static final String NAME_REGEX = "[\\w\\s]+";
     
     /**
      * Checks if the provided username has valid syntax.
@@ -72,15 +71,26 @@ public class Validation {
     /**
      * Checks if the provided phone number has valid syntax.
      *
-     * @param password the phone number to validate.
+     * @param phoneNumber
      * @return true if the phone number is valid, false otherwise.
      */
     public boolean isValidSyntaxPhoneNumber(String phoneNumber) {
-        // Password must be at least 8 characters long.
-        // Must not contain space characters.
-        // Must contain at least one digit, one letter, and one special character.
+        // Phone number must be containt 10 digits.
         Pattern pattern = Pattern.compile(PHONE_REGEX);
         Matcher matcher = pattern.matcher(phoneNumber);
+        return matcher.matches();
+    }
+
+    /**
+     * Checks if the provided name string has valid syntax.
+     *
+     * @param name
+     * @return true if the name is valid, false otherwise.
+     */
+    public boolean isValidSyntaxNameString(String name) {
+        // Name of user can not have special character.
+        Pattern pattern = Pattern.compile(NAME_REGEX);
+        Matcher matcher = pattern.matcher(name);
         return matcher.matches();
     }
 }
