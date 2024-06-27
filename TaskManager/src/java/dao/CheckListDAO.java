@@ -1,10 +1,42 @@
 package dao;
 
 import java.sql.*;
-import model.User;
 
 public class CheckListDAO {
-    
+
+    public ResultSet getAllCheckListByCardID(String cardID) throws SQLException {
+        String query = "SELECT * FROM [dbo].[CheckList] WHERE [CardID] = ?";
+        PreparedStatement pstmt = this.createPreparedStatement(query);
+        // modify the query here
+        pstmt.setString(1, cardID);
+        return executeQuery(pstmt);
+    }
+
+    public void deleteCheckList(String checkListID) throws SQLException {
+        String query = "DELETE FROM [dbo].[CheckList] WHERE [CheckListID] = ?";
+        PreparedStatement pstmt = this.createPreparedStatement(query);
+        // modify the query here
+        pstmt.setString(1, checkListID);
+        pstmt.executeUpdate();
+    }
+
+    public void updateNameCheckList(String checkListID, String name) throws SQLException {
+        String query = "UPDATE [dbo].[CheckList] SET [Name] = ? WHERE [CheckListID] = ?";
+        PreparedStatement pstmt = this.createPreparedStatement(query);
+        // modify the query here
+        pstmt.setString(1, name);
+        pstmt.setString(2, checkListID);
+
+        pstmt.executeUpdate();
+    }
+
+    public ResultSet getLastestCheckListID() throws SQLException {
+        String query = "SELECT [CheckListID] FROM [dbo].[CheckList] ORDER BY [CheckListID] DESC LIMIT 1";
+        PreparedStatement pstmt = createPreparedStatement(query);
+        // modify the query here
+        return executeQuery(pstmt);
+    }
+
     /**
      * Create instance for PreparedStatement class
      *
