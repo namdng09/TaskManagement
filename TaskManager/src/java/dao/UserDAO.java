@@ -18,26 +18,23 @@ public class UserDAO {
      * Inserts a new user into the database.
      *
      * @param user The User object to insert.
+     * @throws java.sql.SQLException
      */
-    public void insertUser(User user) {
+    public void insertUser(User user) throws SQLException {
         String query = "INSERT INTO [dbo].[User]"
                 + "([User_UID],[UserName],[Email],[Password],[FirstName],[LastName],[BirthDate],[Phone])"
                 + "VALUES (?,?,?,?,?,?,?,?)";
-        try (PreparedStatement pstmt = createPreparedStatement(query)) {
-            pstmt.setString(1, user.getUserUID());
-            pstmt.setString(2, user.getUsername());
-            pstmt.setString(3, user.getEmail());
-            pstmt.setString(4, user.getPassword());
-            pstmt.setString(5, user.getFirstName());
-            pstmt.setString(6, user.getLastName());
-            pstmt.setDate(7, user.getBirthDate());
-            pstmt.setString(8, user.getPhoneNumber());
+        PreparedStatement pstmt = createPreparedStatement(query);
+        pstmt.setString(1, user.getUserUID());
+        pstmt.setString(2, user.getUsername());
+        pstmt.setString(3, user.getEmail());
+        pstmt.setString(4, user.getPassword());
+        pstmt.setString(5, user.getFirstName());
+        pstmt.setString(6, user.getLastName());
+        pstmt.setDate(7, user.getBirthDate());
+        pstmt.setString(8, user.getPhoneNumber());
 
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            //TODO: handle exception
-            System.out.println("ERROR: " + e.getMessage());
-        }
+        pstmt.executeUpdate();
     }
 
     /**
@@ -45,17 +42,13 @@ public class UserDAO {
      *
      * @param username The username of the user to delete.
      */
-    public void deleteUserByUsername(String username) {
+    public void deleteUserByUsername(String username) throws SQLException {
         String query = "DELETE FROM [dbo].[User] WHERE [UserName] = ?";
 
-        try (PreparedStatement pstmt = createPreparedStatement(query)) {
-            pstmt.setString(1, username);
+        PreparedStatement pstmt = createPreparedStatement(query);
+        pstmt.setString(1, username);
 
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            //TODO: handle exception
-            System.out.println("ERROR: " + e.getMessage());
-        }
+        pstmt.executeUpdate();
     }
 
     /**
@@ -83,52 +76,12 @@ public class UserDAO {
      * found.
      * @throws java.sql.SQLException
      */
-    public ResultSet getUserByEmail(String email) throws SQLException{
+    public ResultSet getUserByEmail(String email) throws SQLException {
         String query = "SELECT * FROM [dbo].[User] WHERE "
                 + "[Email] = ? ";
         PreparedStatement pstmt = createPreparedStatement(query);
         pstmt.setString(1, email);
         return executeQuery(pstmt);
-    }
-
-    /**
-     * Checks if a username exist in the database
-     *
-     * @param username The username to check for existence
-     * @return true if the username exist, false otherwise.j
-     */
-    public boolean isExistUserName(String username) {
-        boolean flag = false;
-        try {
-            ResultSet rs = this.getUserByUsername(username);
-            if (rs.next()) {  // Mean have duplicate username
-                flag = true;
-            }
-        } catch (SQLException e) {
-            //TODO: handle exception
-            System.out.println("ERROR: " + e.getMessage());
-        }
-        return flag;
-    }
-
-    /**
-     * Checks if an email exists in the database.
-     *
-     * @param email The email address to check for existence.
-     * @return true if the email exists, false otherwise.
-     */
-    public boolean isExistEmail(String email) {
-        boolean flag = false;
-        try {
-            ResultSet rs = this.getUserByEmail(email);
-            if (rs.next()) {  // Mean have duplicate email
-                flag = true;
-            }
-        } catch (SQLException e) {
-            //TODO: handle exception
-            System.out.println("ERROR: " + e.getMessage());
-        }
-        return flag;
     }
 
     /**
