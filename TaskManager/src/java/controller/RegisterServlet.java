@@ -115,6 +115,9 @@ public class RegisterServlet extends HttpServlet {
                 String phoneNumber = request.getParameter("phone");
 
                 user.checkValidPhoneNumber(phoneNumber);
+                user.checkValidNameString(firstName);
+                user.checkValidNameString(lastName);
+
                 user.registerUser(user.getUsername(), user.getEmail(), user.getPassword(), firstName, lastName, birthDate, phoneNumber);
                 response.sendRedirect("login");
             } catch (Exception e) {
