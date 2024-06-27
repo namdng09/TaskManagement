@@ -2,9 +2,11 @@ package model;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
+import dao.CardDAO;
+import java.time.LocalDate;
 
 public class Card {
+
     private String cardID;
     private String cardName;
     private String description;
@@ -14,6 +16,12 @@ public class Card {
     private ArrayList<CheckList> checkLists;
 
     public Card() {
+    }
+
+    public Card(String cardID, String cardName, Date createdDate) {
+        this.cardID = cardID;
+        this.cardName = cardName;
+        this.createdDate = createdDate;
     }
 
     public Card(String cardID, String cardName, String description, Date createdDate, Date dueDate, ArrayList<Comment> comments, ArrayList<CheckList> checkLists) {
@@ -86,6 +94,70 @@ public class Card {
     public String toString() {
         return "Card{" + "cardID=" + cardID + ", cardName=" + cardName + ", description=" + description + ", createdDate=" + createdDate + ", dueDate=" + dueDate + ", comments=" + comments + ", checkLists=" + checkLists + '}';
     }
-    
-    
+
+    public ArrayList<Card> getAllCardByListTaskID(String listTaskID) {
+        CardDAO cardDAO = new CardDAO();
+        ArrayList<Card> cards = new ArrayList<>();
+        try {
+            ResultSet rs = cardDAO.getAllCardByListTaskID(listTaskID);
+            while (rs.next()) {
+                String id = rs.getString("CardID");
+                String name = rs.getString("Name");
+                String des = rs.getString("Description");
+                Date cDate = rs.getDate("CreatedDate");
+                Date dDate = rs.getDate("DueDate");
+                ArrayList<Comment> listComments = (new Comment()).getAllCommentByCardID(id);
+                ArrayList<CheckList> allCheckLists = (new CheckList()).getAllCheckListByCardID(id);
+
+                Card card = new Card(id, name, des, cDate, dDate, listComments, allCheckLists);
+                cards.add(card);
+            }
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+        return cards;
+    }
+
+    public void createCard(String listTaskID, String name) {
+        CardDAO cardDAO = new CardDAO();
+        String id = this.generateCardID();
+        Date currentDate = this.getCurrentDate();
+        Card card = new Card(id, name, currentDate);
+        try {
+            cardDAO.insertCard(card, listTaskID);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    public String generateCardID() {
+        CardDAO cardDAO = new CardDAO();
+        String lastID = null;
+        try {
+            ResultSet rs = cardDAO.getLastestCardID();
+            if (rs.next()) {
+                lastID = rs.getString("CardID");
+            }
+
+            if (lastID == null) {
+                lastID = "CA0001";
+            } else {
+                int idNum = Integer.parseInt(lastID.substring(2));
+                idNum++;
+                lastID = String.format("CA%04d", idNum);
+            }
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+        return lastID;
+    }
+
+    public Date getCurrentDate() {
+        LocalDate currentDate = LocalDate.now(); // Get current date
+        Date sqlDate = Date.valueOf(currentDate); // Convert to java.sql.Date
+        return sqlDate;
+    }
 }
