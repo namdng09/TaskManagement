@@ -1,76 +1,140 @@
 package dao;
 
 import java.sql.*;
-import model.Broad;
+import model.Board;
 
-public class BroadDAO {
+public class BoardDAO {
 
-    public void insertBroad(Broad broad, String useruid) throws SQLException {
-        String query = "INSERT INTO [dbo].[Broad]"
-                + "([BroadID],[User_UID],[Name],[CreatedDate],[isPublic],[image])"
-                + "VALUES (?,?,?,?,?,?)";
+    public void insertBoard(Board board, String useruid) throws SQLException {
+        String query = "INSERT INTO [dbo].[Board]"
+                + "([BoardID],[User_UID],[Name],[CreatedDate],[isPublic],[isCompleted], [description],[Image])"
+                + "VALUES (?,?,?,?,?,?,?,?)";
         PreparedStatement pstmt = createPreparedStatement(query);
-        pstmt.setString(1, broad.getBroadID());
+        pstmt.setString(1, board.getBoardID());
         pstmt.setString(2, useruid);
-        pstmt.setString(3, broad.getBroadName());
-        pstmt.setDate(4, broad.getCreateDate());
-        pstmt.setBoolean(5, broad.isIsPublic());
-        pstmt.setString(6, broad.getImage());
+        pstmt.setString(3, board.getBoardName());
+        pstmt.setDate(4, board.getCreateDate());
+        pstmt.setBoolean(5, board.isPubliced());
+        pstmt.setBoolean(6, board.isCompleted());
+        pstmt.setString(7, board.getDescription());
+        pstmt.setString(8, board.getImage());
 
         pstmt.executeUpdate();
     }
 
-    public void deleteBroad(String broadID) throws SQLException {
-        String query = "DELETE FROM [dbo].[Broad] WHERE [BroadID] = ?";
+    public void deleteBoard(String boardID) throws SQLException {
+        String query = "DELETE FROM [dbo].[Board] WHERE [BoardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
-        pstmt.setString(1, broadID);
+        pstmt.setString(1, boardID);
 
         pstmt.executeUpdate();
     }
 
-    public void renameBroad(String broadID, String newName) throws SQLException {
-        String query = "UPDATE [dbo].[Broad] SET [Name] = ? WHERE [BroadID] = ?";
+    public void updateBoardName(String boardID, String newName) throws SQLException {
+        String query = "UPDATE [dbo].[Board] SET [Name] = ? WHERE [BoardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         pstmt.setString(1, newName);
-        pstmt.setString(2, broadID);
+        pstmt.setString(2, boardID);
 
         pstmt.executeUpdate();
     }
 
-    public ResultSet getAllBroadByUserUID(String useruid) throws SQLException {
-        String query = "SELECT * FROM [dbo].[Broad] WHERE [USER_ID] = ?";
+    public void deleteBoardMember(String useruid, String boardID) throws SQLException {
+        String query = "DELETE FROM [dbo].[BoardMember]"
+                + "WHERE [User_UID] = ?"
+                + "AND [BoardID] = ?";
+        PreparedStatement pstmt = this.createPreparedStatement(query);
+        pstmt.setString(1, useruid);
+        pstmt.setString(2, boardID);
+
+        pstmt.executeUpdate();
+    }
+
+    public void insertBoardMember(String useruid, String boardID) throws SQLException {
+        String query = "INSERT INTO [dbo].[BoardMember]"
+                + "([User_UID], [BoardID])"
+                + "VALUES (?,?)";
+        PreparedStatement pstmt = this.createPreparedStatement(query);
+        pstmt.setString(1, useruid);
+        pstmt.setString(2, boardID);
+
+        pstmt.executeUpdate();
+    }
+
+    public ResultSet getBoardByBoardID(String boardID) throws SQLException {
+        String query = "SELECT [Board].[BoardID], [Board].[Name], "
+                + "CONCAT([User].[Firstname], ' ', [User].[Lastname]) AS FullName, "
+                + "[Board].[CreatedDate], [Board].[isPublic], [Board].[isCompleted], "
+                + "[Board].[Description], [Board].[Image] "
+                + "FROM [dbo].[Board] "
+                + "JOIN [dbo].[BoardMember] ON [Board].[BoardID] = [BoardMember].[BoardID] "
+                + "JOIN [dbo].[User] ON [BoardMember].[User_UID] = [User].[User_UID] "
+                + "WHERE [Board].[BoardID] = ?";
         PreparedStatement pstmt = createPreparedStatement(query);
-        // modify the query here
+        pstmt.setString(1, boardID);
+        return executeQuery(pstmt);
+    }
+
+    public ResultSet getAllBoardByName(String useruid, String partOfName) throws SQLException {
+        String query = "SELECT [Board].[BoardID], [Board].[Name], "
+                + "CONCAT([User].[Firstname], ' ', [User].[Lastname]) AS FullName, "
+                + "[Board].[CreatedDate], [Board].[isPublic], [Board].[isCompleted], "
+                + "[Board].[Description], [Board].[Image] "
+                + "FROM [dbo].[Board] "
+                + "JOIN [dbo].[BoardMember] ON [Board].[BoardID] = [BoardMember].[BoardID] "
+                + "JOIN [dbo].[User] ON [BoardMember].[User_UID] = [User].[User_UID] "
+                + "WHERE [BoardMember].[User_UID] = ? AND [Board].[Name] LIKE ?";
+        PreparedStatement pstmt = createPreparedStatement(query);
+        pstmt.setString(1, useruid);
+        pstmt.setString(2, "%" + partOfName + "%");
+        return executeQuery(pstmt);
+    }
+
+    public ResultSet getAllBoardByUserUID(String useruid) throws SQLException {
+        String query = "SELECT [Board].[BoardID], [Board].[Name], "
+                + "CONCAT([User].[Firstname], ' ', [User].[Lastname]) AS FullName, "
+                + "[Board].[CreatedDate], [Board].[isPublic], [Board].[isCompleted], "
+                + "[Board].[Description], [Board].[Image] "
+                + "FROM [dbo].[Board] "
+                + "JOIN [dbo].[BoardMember] ON [Board].[BoardID] = [BoardMember].[BoardID] "
+                + "JOIN [dbo].[User] ON [BoardMember].[User_UID] = [User].[User_UID] "
+                + "WHERE [BoardMember].[User_UID] = ?";
+        PreparedStatement pstmt = createPreparedStatement(query);
         pstmt.setString(1, useruid);
         return executeQuery(pstmt);
     }
 
-    public ResultSet getAllBroadByName(String partOfName) throws SQLException {
-        String query = "SELECT * FROM [dbo].[Broad] WHERE [Name] LIKE ?";
-        PreparedStatement pstmt = this.createPreparedStatement(query);
-        // modify the query here
-        pstmt.setString(1, "%" + partOfName + "%");
+    public ResultSet getAllUserByBoardID(String boardID) throws SQLException {
+        String query = "SELECT [User].[User_UID], [User].[Username], [User].[Email], "
+                + "[User].[FirstName], [User].[LastName] "
+                + "FROM [dbo].[User] "
+                + "JOIN [dbo].[BoardMember] ON [User].[User_UID] = [BoardMember].[User_UID] "
+                + "WHERE [BoardMember].[BoardID] = ?";
+        PreparedStatement pstmt = createPreparedStatement(query);
+        pstmt.setString(1, boardID);
         return executeQuery(pstmt);
     }
 
-    public void toggleIsPublic(String broadID) throws SQLException {
-        String query = "UPDATE [dbo].[Broad] SET [isPublic] = NOT [isPublic] WHERE [BroadID] = ?";
+    public void toggleIsPublic(String boardID) throws SQLException {
+        String query = "UPDATE [dbo].[Board] SET [isPublic] = NOT [isPublic] WHERE [BoardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
+        pstmt.setString(1, boardID);
         pstmt.executeUpdate();
     }
 
-    public ResultSet getAllBroadByID(String broadID) throws SQLException {
-        String query = "SELECT * FROM [dbo].[Broad] WHERE [BroadID] = ?";
+    public ResultSet getLastestBoardID() throws SQLException {
+        String query = "SELECT [BoardID] FROM [dbo].[Board] ORDER BY [BoardID] DESC LIMIT 1";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
-        pstmt.setString(1, broadID);
         return executeQuery(pstmt);
     }
 
-    public ResultSet getLastestBroadID() throws SQLException {
-        String query = "SELECT [BroadID] FROM [dbo].[Broad] ORDER BY [BroadID] DESC LIMIT 1";
+    public ResultSet countMemberBoard(String useruid, String boardID) throws SQLException {
+        String query = "SELECT COUNT(*) AS count FROM [dbo].[BoardMember] WHERE [User_UID] = ? AND [BoardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
+        pstmt.setString(1, useruid);
+        pstmt.setString(2, boardID);
         return executeQuery(pstmt);
     }
 
