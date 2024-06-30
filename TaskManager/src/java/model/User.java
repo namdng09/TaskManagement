@@ -5,6 +5,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import utility.Utility;
 import utility.Validation;
 import java.sql.*;
+import java.util.ArrayList;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -26,6 +27,14 @@ public class User {
     private String phoneNumber;
 
     public User() {
+    }
+
+    public User(String userUID, String username, String email, String firstName, String lastName) {
+        this.userUID = userUID;
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public User(String userUID, String username, String email, String password, String firstName, String lastName, Date birthDate, String phoneNumber) {
@@ -305,4 +314,22 @@ public class User {
         return flag;
     }
 
+    public ArrayList<User> searchUserByPartOfUsername(String partOfName) {
+        UserDAO userDAO = new UserDAO();
+        ArrayList<User> listUsers = new ArrayList<>();
+        try {
+            ResultSet rs = userDAO.getAllUserByPartOfname(partOfName);
+            String id = rs.getString("User_UID");
+            String uName = rs.getString("Username");
+            String email = rs.getString("Email");
+            String fName = rs.getString("FirstName");
+            String lName = rs.getString("LastName");
+            User user = new User(id, uName, email, fName, lName);
+            listUsers.add(user);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+        return listUsers;
+    }
 }

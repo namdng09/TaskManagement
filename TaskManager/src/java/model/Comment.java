@@ -128,7 +128,7 @@ public class Comment {
         CommentDAO commentDAO = new CommentDAO();
         try {
             commentDAO.deleteComment(commentID);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             //TODO: handle exception
             System.out.println("ERROR: " + e.getMessage());
         }

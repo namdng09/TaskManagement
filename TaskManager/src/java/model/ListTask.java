@@ -3,6 +3,7 @@ package model;
 import java.sql.*;
 import java.util.ArrayList;
 import dao.ListTaskDAO;
+import utility.Utility;
 
 public class ListTask {
 
@@ -53,11 +54,11 @@ public class ListTask {
         return "ListTask{" + "listTaskID=" + listTaskID + ", listTaskName=" + listTaskName + ", cards=" + cards + '}';
     }
 
-    public ArrayList<ListTask> getAllListTaskByBroadID(String broadID) {
+    public ArrayList<ListTask> getAllListTaskByBoardID(String boardID) {
         ListTaskDAO listTaskDAO = new ListTaskDAO();
         ArrayList<ListTask> listTask = new ArrayList<>();
         try {
-            ResultSet rs = listTaskDAO.getAllListTaskByBroadID(broadID);
+            ResultSet rs = listTaskDAO.getAllListTaskByBoardID(boardID);
             while (rs.next()) {
                 String id = rs.getString("ListTaskID");
                 String name = rs.getString("Name");
@@ -73,38 +74,20 @@ public class ListTask {
         return listTask;
     }
 
-    public void createListTask(String listTaskID, String broadID, String name) {
+    public void createListTask(String boardID, String name) {
         ListTaskDAO listTaskDAO = new ListTaskDAO();
+        Utility utils = new Utility();
         try {
-            ListTask listTask = new ListTask(listTaskID, name);
-            listTaskDAO.insertListTask(listTask, broadID);
+            String prefix = "LT";
+            ResultSet latestIDResultSet = listTaskDAO.getLastestListTaskID();
+            String id = utils.generateID(prefix, latestIDResultSet);
+            ListTask listTask = new ListTask(id, name);
+
+            listTaskDAO.insertListTask(listTask, boardID);
         } catch (SQLException e) {
             //TODO: handle exception
             System.out.println("ERROR: " + e.getMessage());
         }
-    }
-
-    public String generateListTaskID() {
-        ListTaskDAO listTaskDAO = new ListTaskDAO();
-        String lastID = null;
-        try {
-            ResultSet rs = listTaskDAO.getLastestListTaskID();
-            if (rs.next()) {
-                lastID = rs.getString("listTaskID");
-            }
-
-            if (lastID == null) {
-                lastID = "LT0001";
-            } else {
-                int idNum = Integer.parseInt(lastID.substring(2));
-                idNum++;
-                lastID = String.format("LT%04d", idNum);
-            }
-        } catch (SQLException e) {
-            //TODO: handle exception
-            System.out.println("ERROR: " + e.getMessage());
-        }
-        return lastID;
     }
 
 }

@@ -3,20 +3,21 @@ package model;
 import java.util.ArrayList;
 import java.sql.*;
 import dao.CheckListDAO;
+import utility.Utility;
 
 public class CheckList {
 
     private String checkListID;
-    private String checkListName;
-    private boolean isChecked;
+    private String checkListTitle;
+    private boolean checked;
 
     public CheckList() {
     }
 
-    public CheckList(String checkListID, String checkListName, boolean isChecked) {
+    public CheckList(String checkListID, String checkListTitle, boolean checked) {
         this.checkListID = checkListID;
-        this.checkListName = checkListName;
-        this.isChecked = isChecked;
+        this.checkListTitle = checkListTitle;
+        this.checked = checked;
     }
 
     public String getCheckListID() {
@@ -27,26 +28,27 @@ public class CheckList {
         this.checkListID = checkListID;
     }
 
-    public String getCheckListName() {
-        return checkListName;
+    public String getCheckListTitle() {
+        return checkListTitle;
     }
 
-    public void setCheckListName(String checkListName) {
-        this.checkListName = checkListName;
+    public void setCheckListTitle(String checkListTitle) {
+        this.checkListTitle = checkListTitle;
     }
 
-    public boolean isIsChecked() {
-        return isChecked;
+    public boolean isChecked() {
+        return checked;
     }
 
-    public void setIsChecked(boolean isChecked) {
-        this.isChecked = isChecked;
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     @Override
     public String toString() {
-        return "CheckList{" + "checkListID=" + checkListID + ", checkListName=" + checkListName + ", isChecked=" + isChecked + '}';
+        return "CheckList{" + "checkListID=" + checkListID + ", checkListTitle=" + checkListTitle + ", checked=" + checked + '}';
     }
+
 
     public ArrayList<CheckList> getAllCheckListByCardID(String cardID) {
         CheckListDAO checkListDAO = new CheckListDAO();
@@ -54,10 +56,10 @@ public class CheckList {
         try {
             ResultSet rs = checkListDAO.getAllCheckListByCardID(cardID);
             String id = rs.getString("CheckListID");
-            String name = rs.getString("Name");
-            boolean checked = rs.getBoolean("isChecked");
+            String tilte = rs.getString("Title");
+            boolean isChecked = rs.getBoolean("isChecked");
 
-            CheckList checkList = new CheckList(id, name, checked);
+            CheckList checkList = new CheckList(id, tilte, isChecked);
             checkLists.add(checkList);
         } catch (SQLException e) {
             //TODO: handle exception
@@ -66,10 +68,37 @@ public class CheckList {
         return checkLists;
     }
 
-    public void editCheckList(String checkListID, String name) {
+    public void createCheckList(String cardID, String checkListTitle) {
+        Utility utils = new Utility();
         CheckListDAO checkListDAO = new CheckListDAO();
         try {
-            checkListDAO.updateNameCheckList(checkListID, name);
+            String prefix = "CL";
+            ResultSet latestIDResultSet = checkListDAO.getLastestCheckListID();
+            String id = utils.generateID(prefix, latestIDResultSet);
+            boolean checked = false;
+
+            CheckList checkList = new CheckList(id, checkListTitle, checked);
+            checkListDAO.insertCheckList(checkList, cardID);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    public void editCheckListTitle(String checkListID, String tilte) {
+        CheckListDAO checkListDAO = new CheckListDAO();
+        try {
+            checkListDAO.updateCheckListTitle(checkListID, tilte);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    public void editCheckListChecked(String checkListID, boolean checked) {
+        CheckListDAO checkListDAO = new CheckListDAO();
+        try {
+            checkListDAO.updateCheckListChecked(checkListID, checked);
         } catch (SQLException e) {
             //TODO: handle exception
             System.out.println("ERROR: " + e.getMessage());
@@ -86,26 +115,4 @@ public class CheckList {
         }
     }
 
-    public String generateCheckListID() {
-        CheckListDAO checkListDAO = new CheckListDAO();
-        String lastID = null;
-        try {
-            ResultSet rs = checkListDAO.getLastestCheckListID();
-            if (rs.next()) {
-                lastID = rs.getString("CheckListID");
-            }
-
-            if (lastID == null) {
-                lastID = "CL0001";
-            } else {
-                int idNum = Integer.parseInt(lastID.substring(2));
-                idNum++;
-                lastID = String.format("CL%04d", idNum);
-            }
-        } catch (SQLException e) {
-            //TODO: handle exception
-            System.out.println("ERROR: " + e.getMessage());
-        }
-        return lastID;
-    }
 }
