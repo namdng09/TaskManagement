@@ -5,12 +5,12 @@ import model.ListTask;
 
 public class ListTaskDAO {
 
-    public void insertListTask(ListTask listTask, String broadID) throws SQLException {
-        String query = "INSERT INTO [dbo].[ListTask] ([ListTaskID],[BroadID],[Name])"
-                + "VALUES (?,?,?,?)";
+    public void insertListTask(ListTask listTask, String boardID) throws SQLException {
+        String query = "INSERT INTO [dbo].[ListTask] ([ListTaskID],[BoardID],[Name])"
+                + "VALUES (?,?,?)";
         PreparedStatement pstmt = createPreparedStatement(query);
         pstmt.setString(1, listTask.getListTaskID());
-        pstmt.setString(2, broadID);
+        pstmt.setString(2, boardID);
         pstmt.setString(3, listTask.getListTaskName());
 
         pstmt.executeUpdate();
@@ -21,21 +21,22 @@ public class ListTaskDAO {
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
         pstmt.setString(1, listTaskID);
+        pstmt.executeUpdate();
     }
 
     public void renameListTask(String listTaskID, String newName) throws SQLException {
         String query = "UPDATE [dbo].[ListTask] SET [Name] = ? WHERE [ListTaskID] = ?";
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
-        pstmt.setString(1, listTaskID);
-        pstmt.setString(2, newName);
+        pstmt.setString(1, newName);
+        pstmt.setString(2, listTaskID);
     }
 
-    public ResultSet getAllListTaskByBroadID(String broadID) throws SQLException {
-        String query = "SELECT * FROM [dbo].[ListTask] WHERE [BroadID] = ?";
+    public ResultSet getAllListTaskByBoardID(String boardID) throws SQLException {
+        String query = "SELECT * FROM [dbo].[ListTask] WHERE [BoardID] = ?";
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
-        pstmt.setString(1, broadID);
+        pstmt.setString(1, boardID);
         return executeQuery(pstmt);
     }
 

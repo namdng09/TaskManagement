@@ -3,7 +3,7 @@ package model;
 import java.sql.*;
 import java.util.ArrayList;
 import dao.CardDAO;
-import java.time.LocalDate;
+import utility.Utility;
 
 public class Card {
 
@@ -121,10 +121,14 @@ public class Card {
 
     public void createCard(String listTaskID, String name) {
         CardDAO cardDAO = new CardDAO();
-        String id = this.generateCardID();
-        Date currentDate = this.getCurrentDate();
-        Card card = new Card(id, name, currentDate);
+        Utility utils = new Utility();
         try {
+            String prefix = "CA";
+            ResultSet latestIDResultSet = cardDAO.getLastestCardID();
+            String id = utils.generateID(prefix, latestIDResultSet);
+            Date currentDate = utils.getCurrentDate();
+            Card card = new Card(id, name, currentDate);
+
             cardDAO.insertCard(card, listTaskID);
         } catch (SQLException e) {
             //TODO: handle exception
@@ -132,32 +136,43 @@ public class Card {
         }
     }
 
-    public String generateCardID() {
+    public void removeCard(String cardID) {
         CardDAO cardDAO = new CardDAO();
-        String lastID = null;
         try {
-            ResultSet rs = cardDAO.getLastestCardID();
-            if (rs.next()) {
-                lastID = rs.getString("CardID");
-            }
-
-            if (lastID == null) {
-                lastID = "CA0001";
-            } else {
-                int idNum = Integer.parseInt(lastID.substring(2));
-                idNum++;
-                lastID = String.format("CA%04d", idNum);
-            }
+            cardDAO.deleteCard(cardID);
         } catch (SQLException e) {
             //TODO: handle exception
             System.out.println("ERROR: " + e.getMessage());
         }
-        return lastID;
     }
 
-    public Date getCurrentDate() {
-        LocalDate currentDate = LocalDate.now(); // Get current date
-        Date sqlDate = Date.valueOf(currentDate); // Convert to java.sql.Date
-        return sqlDate;
+    public void editCardName(String cardID, String name) {
+        CardDAO cardDAO = new CardDAO();
+        try {
+            cardDAO.updateCardName(cardID, name);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    public void editCardDescription(String cardID, String description) {
+        CardDAO cardDAO = new CardDAO();
+        try {
+            cardDAO.updateCardDescription(cardID, description);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    public void editCardDueDate(String cardID, Date dueDate) {
+        CardDAO cardDAO = new CardDAO();
+        try {
+            cardDAO.updateCardDueDate(cardID, dueDate);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
     }
 }

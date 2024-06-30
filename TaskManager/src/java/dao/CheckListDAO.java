@@ -1,8 +1,22 @@
 package dao;
 
 import java.sql.*;
+import model.CheckList;
 
 public class CheckListDAO {
+
+    public void insertCheckList(CheckList checkList, String cardID) throws SQLException{
+        String query = "INSERT INTO [dbo].[CheckList]"
+                + "([CheckListID],[CardID],[Title],[isChecked])"
+                + "VALUES (?,?,?,?)";
+        PreparedStatement pstmt = createPreparedStatement(query);
+        pstmt.setString(1, checkList.getCheckListID());
+        pstmt.setString(2, cardID);
+        pstmt.setString(3, checkList.getCheckListTitle());
+        pstmt.setBoolean(4, checkList.isChecked());
+
+        pstmt.executeUpdate();
+    }
 
     public ResultSet getAllCheckListByCardID(String cardID) throws SQLException {
         String query = "SELECT * FROM [dbo].[CheckList] WHERE [CardID] = ?";
@@ -20,11 +34,21 @@ public class CheckListDAO {
         pstmt.executeUpdate();
     }
 
-    public void updateNameCheckList(String checkListID, String name) throws SQLException {
-        String query = "UPDATE [dbo].[CheckList] SET [Name] = ? WHERE [CheckListID] = ?";
+    public void updateCheckListTitle(String checkListID, String title) throws SQLException {
+        String query = "UPDATE [dbo].[CheckList] SET [Title] = ? WHERE [CheckListID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
-        pstmt.setString(1, name);
+        pstmt.setString(1, title);
+        pstmt.setString(2, checkListID);
+
+        pstmt.executeUpdate();
+    }
+
+    public void updateCheckListChecked(String checkListID, boolean checked) throws SQLException {
+        String query = "UPDATE [dbo].[CheckList] SET [isChecked] = ? WHERE [CheckListID] = ?";
+        PreparedStatement pstmt = this.createPreparedStatement(query);
+        // modify the query here
+        pstmt.setBoolean(1, checked);
         pstmt.setString(2, checkListID);
 
         pstmt.executeUpdate();
