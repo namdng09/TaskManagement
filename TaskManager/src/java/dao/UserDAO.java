@@ -41,6 +41,7 @@ public class UserDAO {
      * Deletes a user from the database by username.
      *
      * @param username The username of the user to delete.
+     * @throws java.sql.SQLException
      */
     public void deleteUserByUsername(String username) throws SQLException {
         String query = "DELETE FROM [dbo].[User] WHERE [UserName] = ?";
@@ -49,6 +50,17 @@ public class UserDAO {
         pstmt.setString(1, username);
 
         pstmt.executeUpdate();
+    }
+
+    public ResultSet getAllUserByPartOfname(String partOfName) throws SQLException {
+        String query = "SELECT * FROM [dbo].[User]"
+        + "WHERE [FirstName] LIKE ? OR [LastName] LIKE ?";
+        PreparedStatement pstmt = this.createPreparedStatement(query);
+        // modify the query here
+        String searchPattern = "%" + partOfName + "%";
+        pstmt.setString(1, searchPattern);
+        pstmt.setString(2, searchPattern);
+        return executeQuery(pstmt);
     }
 
     /**
