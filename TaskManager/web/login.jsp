@@ -41,9 +41,9 @@
                             <h5 style="color: red">${requestScope.error}</h5>
                             <c:set var="cookie" value="${pageContext.request.cookies}"/>
                             <form action="login" method="post">
-                                <input class="form-control" type="text" name="name" placeholder="Username" value="${cookie['userCookie'].getValue()}" required>
-                                <input class="form-control" type="password" name="pass" placeholder="Password" value="${cookie['passCookie'].getValue()}" required>
-                                <input type="checkbox" id="chk1" ${(cookie['remCookie'].getValue()!=null?'checked':'')} name="rem"><label for="chk1">Remmeber me</label>
+                                <input class="form-control" type="text" name="name" placeholder="Username" value="${requestScope.uName}" required>
+                                <input class="form-control" type="password" name="pass" placeholder="Password" value="${uPass}"" required>
+                                <input type="checkbox" id="chk1" ${reMem==null?"":"checked"} name="rem"><label for="chk1">Remmeber me</label>
                                 <div class="form-button">
                                     <button id="submit" type="submit" class="ibtn">Login</button>
                                 </div>
