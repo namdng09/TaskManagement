@@ -95,6 +95,14 @@ public class UserDAO {
         pstmt.setString(1, email);
         return executeQuery(pstmt);
     }
+    
+    public ResultSet getUserByPhoneNumber(String phoneNumber) throws SQLException {
+        String query = "SELECT * FROM [dbo].[User] WHERE "
+                + "[Phone] = ? ";
+        PreparedStatement pstmt = createPreparedStatement(query);
+        pstmt.setString(1, phoneNumber);
+        return executeQuery(pstmt);
+    }
 
     /**
      * Create instance for PreparedStatement class
@@ -122,4 +130,6 @@ public class UserDAO {
     public ResultSet executeQuery(PreparedStatement pstmt) throws SQLException {
         return pstmt.executeQuery();
     }
+
+    
 }
