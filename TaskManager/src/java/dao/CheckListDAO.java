@@ -55,7 +55,7 @@ public class CheckListDAO {
     }
 
     public ResultSet getLastestCheckListID() throws SQLException {
-        String query = "SELECT [CheckListID] FROM [dbo].[CheckList] ORDER BY [CheckListID] DESC LIMIT 1";
+        String query = "SELECT TOP 1 [CheckListID] FROM [dbo].[CheckList] ORDER BY [CheckListID] DESC";
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
         return executeQuery(pstmt);

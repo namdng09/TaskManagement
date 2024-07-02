@@ -9,7 +9,7 @@
         <filter-class>filter.LoginFilter</filter-class>
         <init-param>
             <param-name>excludedUrls</param-name>
-            <param-value>/webfonts,/css,/js,/images,/login,/register</param-value>
+            <param-value>/webfonts,/css,/js,/images,/login,/register,/fonts</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -36,6 +36,10 @@
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>controller.LogoutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateBoardServlet</servlet-name>
+        <servlet-class>controller.CreateBoardServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -51,5 +55,9 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateBoardServlet</servlet-name>
+        <url-pattern>/createBoard</url-pattern>
     </servlet-mapping>
 </web-app>

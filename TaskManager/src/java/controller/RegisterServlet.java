@@ -86,8 +86,8 @@ public class RegisterServlet extends HttpServlet {
                 String email = request.getParameter("email");
                 String password = request.getParameter("pass");
 
-                user.checkValidEmail(email);
                 user.checkValidUserName(username);
+                user.checkValidEmail(email);
                 user.checkValidPassword(password);
 
                 user.setUsername(username);
@@ -100,7 +100,8 @@ public class RegisterServlet extends HttpServlet {
                 //TODO: handle exception
                 status = "error";
                 message = e.getMessage();
-                request.setAttribute(status, message);
+                request.setAttribute("status", status);
+                request.setAttribute("message", message);
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             }
         } else {
@@ -114,9 +115,10 @@ public class RegisterServlet extends HttpServlet {
                 Date birthDate = Date.valueOf(request.getParameter("birthDate"));
                 String phoneNumber = request.getParameter("phone");
 
-                user.checkValidPhoneNumber(phoneNumber);
                 user.checkValidNameString(firstName);
                 user.checkValidNameString(lastName);
+                user.checkValidPhoneNumber(phoneNumber);
+                
 
                 user.registerUser(user.getUsername(), user.getEmail(), user.getPassword(), firstName, lastName, birthDate, phoneNumber);
                 response.sendRedirect("login");
@@ -124,7 +126,8 @@ public class RegisterServlet extends HttpServlet {
                 //TODO: handle exception
                 status = "error";
                 message = e.getMessage();
-                request.setAttribute(status, message);
+                request.setAttribute("status", status);
+                request.setAttribute("message", message);
                 request.getRequestDispatcher("registerInformation.jsp").forward(request, response);
             }
         }
