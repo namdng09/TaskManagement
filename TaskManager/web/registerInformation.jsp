@@ -10,6 +10,78 @@
         <link rel="stylesheet" type="text/css" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="css/iofrm-style.css">
         <link rel="stylesheet" type="text/css" href="css/iofrm-theme30.css">
+        <style>
+            .snackbar {
+                visibility: hidden;
+                min-width: 250px;
+                background-color: #333;
+                color: #fff;
+                text-align: center;
+                border-radius: 2px;
+                padding: 16px;
+                position: fixed;
+                z-index: 1;
+                left: 50%;
+                bottom: 30px;
+                font-size: 17px;
+                transform: translateX(-50%);
+            }
+
+            .snackbar.show {
+                visibility: visible;
+                -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            }
+
+            @-webkit-keyframes fadein {
+                from {
+                    bottom: 0;
+                    opacity: 0;
+                }
+
+                to {
+                    bottom: 30px;
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadein {
+                from {
+                    bottom: 0;
+                    opacity: 0;
+                }
+
+                to {
+                    bottom: 30px;
+                    opacity: 1;
+                }
+            }
+
+            @-webkit-keyframes fadeout {
+                from {
+                    bottom: 30px;
+                    opacity: 1;
+                }
+
+                to {
+                    bottom: 0;
+                    opacity: 0;
+                }
+            }
+
+            @keyframes fadeout {
+                from {
+                    bottom: 30px;
+                    opacity: 1;
+                }
+
+                to {
+                    bottom: 0;
+                    opacity: 0;
+                }
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <div class="form-body on-top-mobile">
@@ -68,6 +140,25 @@
                                     </div>
                                 </div>
                             </form>
+                            <!-- Snackbar -->
+                            <div id="snackbar" class="snackbar"></div>
+                            <script>
+                                window.onload = function () {
+                                    var status = "<%= request.getAttribute("status") != null ? request.getAttribute("status") : "" %>";
+                                    var message = "<%= request.getAttribute("message") != null ? request.getAttribute("message") : "" %>";
+
+                                    if (status && message) {
+                                        var snackbar = document.getElementById("snackbar");
+                                        snackbar.className = "snackbar show";
+                                        snackbar.innerText = message;
+                                        snackbar.style.backgroundColor = status === 'success' ? '#4caf50' : '#f44336';
+
+                                        setTimeout(function () {
+                                            snackbar.className = snackbar.className.replace(" show", "");
+                                        }, 3000);
+                                    }
+                                };
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -83,7 +174,7 @@
                 yesterday.setDate(today.getDate() - 1);
 
                 var yyyy = yesterday.getFullYear();
-                var mm = String(yesterday.getMonth() + 1).padStart(2, '0'); 
+                var mm = String(yesterday.getMonth() + 1).padStart(2, '0');
                 var dd = String(yesterday.getDate()).padStart(2, '0');
                 var maxDate = yyyy + '-' + mm + '-' + dd;
 
@@ -92,7 +183,7 @@
                 birthDateInput.value = '1999-01-01';
             });
         </script>
-
+        <script src="js/snackbar.js"></script>      
         <script src="js/jquery.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

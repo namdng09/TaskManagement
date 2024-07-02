@@ -36,7 +36,7 @@ public class CommentDAO {
     }
 
     public ResultSet getLastestCommentID() throws SQLException {
-        String query = "SELECT [CommentID] FROM [dbo].[Comment] ORDER BY [CommentID] DESC LIMIT 1";
+        String query = "SELECT TOP 1 [CommentID] FROM [dbo].[Comment] ORDER BY [CommentID] DESC";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
         return executeQuery(pstmt);

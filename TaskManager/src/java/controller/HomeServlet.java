@@ -11,6 +11,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import model.Board;
+import model.User;
+
 
 /**
  *
@@ -53,7 +58,18 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession(false); // Use false to prevent creating a new session
+        Board board = new Board();
+        User user = (User) session.getAttribute("account");
+
+        if (session == null || session.getAttribute("account") == null) {
+            response.sendRedirect("login"); // Redirect to login page if not logged in
+            return;
+        }
+        
+        ArrayList<Board> listBoardlist = board.getAllBoardByUserUID(user.getUserUID());
+        request.setAttribute("boards", listBoardlist);
+        request.getRequestDispatcher("workspace-boards.jsp").forward(request, response);
     } 
 
     /** 

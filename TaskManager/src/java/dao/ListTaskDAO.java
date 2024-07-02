@@ -41,7 +41,7 @@ public class ListTaskDAO {
     }
 
     public ResultSet getLastestListTaskID() throws SQLException {
-        String query = "SELECT [ListTaskID] FROM [dbo].[ListTask] ORDER BY [ListTaskID] DESC LIMIT 1";
+        String query = "SELECT TOP 1 [ListTaskID] FROM [dbo].[ListTask] ORDER BY [ListTaskID] DESC";
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
         return executeQuery(pstmt);
