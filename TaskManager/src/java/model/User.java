@@ -146,6 +146,10 @@ public class User {
             message = "Phone number is not valid!";
             throw new Exception(message);
         }
+        if (this.isExistPhoneNumber(phone)) {
+            message = "Phone number is already existed!";
+            throw new Exception(message);
+        }
     }
 
     /**
@@ -304,6 +308,27 @@ public class User {
         boolean flag = false;
         try {
             ResultSet rs = userDAO.getUserByEmail(email);
+            if (rs.next()) {  // Mean have duplicate email
+                flag = true;
+            }
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+        return flag;
+    }
+    
+    /**
+     * Checks if an email exists in the database.
+     *
+     * @param phoneNumber
+     * @return true if the email exists, false otherwise.
+     */
+    public boolean isExistPhoneNumber(String phoneNumber) {
+        UserDAO userDAO = new UserDAO();
+        boolean flag = false;
+        try {
+            ResultSet rs = userDAO.getUserByPhoneNumber(phoneNumber);
             if (rs.next()) {  // Mean have duplicate email
                 flag = true;
             }
