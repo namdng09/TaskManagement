@@ -149,7 +149,7 @@
 
                                         <ul class="user-menu-small-nav">
                                             <li>
-                                                <a href="#"
+                                                <a href="home"
                                                    ><i class="icon-material-outline-dashboard"></i>
                                                     Boards</a
                                                 >
@@ -213,7 +213,7 @@
                                 <div class="dashboard-nav-inner">
                                     <ul data-submenu-title="Start">
                                         <li>
-                                            <a href="#"
+                                            <a href="home"
                                                ><i class="icon-material-outline-dashboard"></i>
                                                 Broads</a
                                             >
