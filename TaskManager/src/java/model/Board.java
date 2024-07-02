@@ -8,6 +8,7 @@ import java.util.Set;
 import dao.BoardDAO;
 import dao.UserDAO;
 import utility.Utility;
+import utility.Validation;
 
 public class Board {
 
@@ -321,5 +322,28 @@ public class Board {
             System.out.println("ERROR: " + e.getMessage());
         }
         return listUserNotInBoard;
+    }
+
+    public boolean isExistBoardName(String name) {
+        BoardDAO boardDAO = new BoardDAO();
+        boolean flag = false;
+        try {
+            ResultSet rs = boardDAO.getBoardByName(name);
+            if (rs.next()) {
+                flag = true;
+            }
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR " + e.getMessage());
+        }
+        return flag;
+    }
+
+    public void checkValidBoardName(String name) throws Exception {
+        String message;
+        if (this.isExistBoardName(name)) {
+            message = "Board name is already existed!";
+            throw new Exception(message);
+        }
     }
 }
