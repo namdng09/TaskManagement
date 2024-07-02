@@ -75,6 +75,13 @@ public class BoardDAO {
         return executeQuery(pstmt);
     }
 
+    public ResultSet getBoardByName(String name) throws SQLException {
+        String query = "SELECT * FROM [dbo].[Board] WHERE [Board].[Name] = ?";
+        PreparedStatement pstmt = createPreparedStatement(query);
+        pstmt.setString(1, name);
+        return executeQuery(pstmt);
+    }
+
     public ResultSet getAllBoardByName(String useruid, String partOfName) throws SQLException {
         String query = "SELECT [Board].[BoardID], [Board].[Name], "
                 + "CONCAT([User].[Firstname], ' ', [User].[Lastname]) AS FullName, "
@@ -123,7 +130,7 @@ public class BoardDAO {
     }
 
     public ResultSet getLastestBoardID() throws SQLException {
-        String query = "SELECT [BoardID] FROM [dbo].[Board] ORDER BY [BoardID] DESC LIMIT 1";
+        String query = "SELECT TOP 1 [BoardID] FROM [dbo].[Board] ORDER BY [BoardID] DESC";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
         return executeQuery(pstmt);

@@ -28,7 +28,7 @@ public class CardDAO {
     }
 
     public ResultSet getLastestCardID() throws SQLException {
-        String query = "SELECT [CardID] FROM [dbo].[Card] ORDER BY [CardID] DESC LIMIT 1";
+        String query = "SELECT TOP 1 [CardID] FROM [dbo].[Card] ORDER BY [CardID] DESC";
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
         return executeQuery(pstmt);
