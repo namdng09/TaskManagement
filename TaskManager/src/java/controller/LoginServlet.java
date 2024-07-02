@@ -116,12 +116,13 @@ public class LoginServlet extends HttpServlet {
         if (!user.checkValidLogin(username, password)) {
             status = "error";
             message = "username or password is not correct!";
-            request.setAttribute(status, message);
+            request.setAttribute("status", status);
+            request.setAttribute("message", message);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             user = user.getAccountByUsername(username);
-            HttpSession section = request.getSession();
-            section.setAttribute("account", user);
+            HttpSession session = request.getSession();
+            session.setAttribute("account", user);
             response.sendRedirect("home");
         }
     }
