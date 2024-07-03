@@ -110,7 +110,7 @@ public class HomeFilter implements Filter {
 
         // User cannot access any .jsp file, it will move to home
         String url = req.getServletPath();
-        if (url.endsWith(".jsp")) {
+        if (url.endsWith(".jsp") || url.endsWith("board")) {
             res.sendRedirect("home");
         }
 
