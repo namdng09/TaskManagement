@@ -47,7 +47,6 @@ public class HomeServlet extends HttpServlet {
         }
     } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -69,7 +68,7 @@ public class HomeServlet extends HttpServlet {
         
         ArrayList<Board> listBoardlist = board.getAllBoardByUserUID(user.getUserUID());
         request.setAttribute("boards", listBoardlist);
-        request.getRequestDispatcher("workspace-boards.jsp").forward(request, response);
+        request.getRequestDispatcher("workspace-dashboards.jsp").forward(request, response);
     } 
 
     /** 
