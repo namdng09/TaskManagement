@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.sql.*;
 import dao.CommentDAO;
 
@@ -10,13 +9,13 @@ public class Comment {
     private String commentID;
     private String firstName;
     private String lastName;
-    private Date createDate;
+    private Timestamp createDate;
     private String comment;
 
     public Comment() {
     }
 
-    public Comment(String commentID, String firstName, String lastName, Date createDate, String comment) {
+    public Comment(String commentID, String firstName, String lastName, Timestamp createDate, String comment) {
         this.commentID = commentID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,11 +31,11 @@ public class Comment {
         this.commentID = commentID;
     }
 
-    public Date getCreateDate() {
+    public Timestamp getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }
 
@@ -79,7 +78,7 @@ public class Comment {
             String id = rs.getString("CommentID");
             String fName = rs.getString("FirstName");
             String lName = rs.getString("LastName");
-            Date date = rs.getDate("CreatedDate");
+            Timestamp date = rs.getTimestamp("CreatedDate");
             String textComment = rs.getString("Comment");
 
             Comment commentObj = new Comment(id, fName, lName, date, textComment);

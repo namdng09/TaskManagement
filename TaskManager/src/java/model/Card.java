@@ -10,21 +10,21 @@ public class Card {
     private String cardID;
     private String cardName;
     private String description;
-    private Date createdDate;
-    private Date dueDate;
+    private Timestamp createdDate;
+    private Timestamp dueDate;
     private ArrayList<Comment> comments;
     private ArrayList<CheckList> checkLists;
 
     public Card() {
     }
 
-    public Card(String cardID, String cardName, Date createdDate) {
+    public Card(String cardID, String cardName, Timestamp createdDate) {
         this.cardID = cardID;
         this.cardName = cardName;
         this.createdDate = createdDate;
     }
 
-    public Card(String cardID, String cardName, String description, Date createdDate, Date dueDate, ArrayList<Comment> comments, ArrayList<CheckList> checkLists) {
+    public Card(String cardID, String cardName, String description, Timestamp createdDate, Timestamp dueDate, ArrayList<Comment> comments, ArrayList<CheckList> checkLists) {
         this.cardID = cardID;
         this.cardName = cardName;
         this.description = description;
@@ -58,19 +58,19 @@ public class Card {
         this.description = description;
     }
 
-    public Date getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getDueDate() {
+    public Timestamp getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(Timestamp dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -104,8 +104,8 @@ public class Card {
                 String id = rs.getString("CardID");
                 String name = rs.getString("Name");
                 String des = rs.getString("Description");
-                Date cDate = rs.getDate("CreatedDate");
-                Date dDate = rs.getDate("DueDate");
+                Timestamp cDate = rs.getTimestamp("CreatedDate");
+                Timestamp dDate = rs.getTimestamp("DueDate");
                 ArrayList<Comment> listComments = (new Comment()).getAllCommentByCardID(id);
                 ArrayList<CheckList> allCheckLists = (new CheckList()).getAllCheckListByCardID(id);
 
@@ -126,7 +126,7 @@ public class Card {
             String prefix = "CA";
             ResultSet latestIDResultSet = cardDAO.getLastestCardID();
             String id = utils.generateID(prefix, latestIDResultSet);
-            Date currentDate = utils.getCurrentDate();
+            Timestamp currentDate = utils.getCurrentDate();
             Card card = new Card(id, name, currentDate);
 
             cardDAO.insertCard(card, listTaskID);
@@ -166,7 +166,7 @@ public class Card {
         }
     }
 
-    public void editCardDueDate(String cardID, Date dueDate) {
+    public void setCardDueDate(String cardID, Timestamp dueDate) {
         CardDAO cardDAO = new CardDAO();
         try {
             cardDAO.updateCardDueDate(cardID, dueDate);

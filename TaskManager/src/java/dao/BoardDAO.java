@@ -13,7 +13,7 @@ public class BoardDAO {
         pstmt.setString(1, board.getBoardID());
         pstmt.setString(2, useruid);
         pstmt.setString(3, board.getBoardName());
-        pstmt.setDate(4, board.getCreateDate());
+        pstmt.setTimestamp(4, board.getCreateDate());
         pstmt.setBoolean(5, board.isPubliced());
         pstmt.setBoolean(6, board.isCompleted());
         pstmt.setString(7, board.getDescription());

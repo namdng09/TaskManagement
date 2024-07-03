@@ -14,7 +14,7 @@ public class CardDAO {
         pstmt.setString(2, listTaskID);
         pstmt.setString(3, card.getCardName());
         pstmt.setString(4, card.getDescription());
-        pstmt.setDate(5, card.getCreatedDate());
+        pstmt.setTimestamp(5, card.getCreatedDate());
 
         pstmt.executeUpdate();
     }
