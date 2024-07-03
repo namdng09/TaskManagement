@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import model.Comment;
 
 public class CommentDAO {
 
@@ -14,6 +15,20 @@ public class CommentDAO {
         // modify the query here
         pstmt.setString(1, cardID);
         return executeQuery(pstmt);
+    }
+
+    public void insertComment(Comment comment, String cardID, String user_UID) throws SQLException {
+        String query = "INSERT INTO [dbo].[Comment]"
+                + "([CommentID],[CardID],[User_UID],[CreateDate],[Comment])"
+                + "VALUES (?,?,?,?,?)";
+        PreparedStatement pstmt = createPreparedStatement(query);
+        pstmt.setString(1, comment.getCommentID());
+        pstmt.setString(2, cardID);
+        pstmt.setString(3, user_UID);
+        pstmt.setTimestamp(4, comment.getCreateDate());
+        pstmt.setString(5, comment.getComment());
+
+        pstmt.executeUpdate();
     }
 
     public void deleteComment(String commentID) throws SQLException {
