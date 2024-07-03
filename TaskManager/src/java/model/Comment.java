@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.sql.*;
 import dao.CommentDAO;
+import utility.Utility;
 
 public class Comment {
 
@@ -13,6 +14,12 @@ public class Comment {
     private String comment;
 
     public Comment() {
+    }
+
+    public Comment(String commentID, Timestamp createDate, String comment) {
+        this.commentID = commentID;
+        this.createDate = createDate;
+        this.comment = comment;
     }
 
     public Comment(String commentID, String firstName, String lastName, Timestamp createDate, String comment) {
@@ -90,27 +97,22 @@ public class Comment {
         return comments;
     }
 
-    public String generateCommentID() {
+    public void createComment(String cardID, String user_UID, String text) {
         CommentDAO commentDAO = new CommentDAO();
-        String lastID = null;
-        try {
-            ResultSet rs = commentDAO.getLastestCommentID();
-            if (rs.next()) {
-                lastID = rs.getString("CommentID");
-            }
+        Utility utils = new Utility();
 
-            if (lastID == null) {
-                lastID = "CO0001";
-            } else {
-                int idNum = Integer.parseInt(lastID.substring(2));
-                idNum++;
-                lastID = String.format("CO%04d", idNum);
-            }
+        try {
+            String prefix = "CO";
+            ResultSet latestIDResultSet = commentDAO.getLastestCommentID();
+            String id = utils.generateID(prefix, latestIDResultSet);
+            Timestamp currentDate = utils.getCurrentDate();
+
+            Comment comment = new Comment(id, currentDate, text);
+            commentDAO.insertComment(comment, cardID, user_UID);
         } catch (SQLException e) {
             //TODO: handle exception
             System.out.println("ERROR: " + e.getMessage());
         }
-        return lastID;
     }
 
     public void editComment(String commentID, String comment) {
