@@ -122,10 +122,11 @@ public class BoardDAO {
         return executeQuery(pstmt);
     }
 
-    public void toggleIsPublic(String boardID) throws SQLException {
-        String query = "UPDATE [dbo].[Board] SET [isPublic] = NOT [isPublic] WHERE [BoardID] = ?";
+    public void toggleIsPublic(String boardID, boolean publiced) throws SQLException {
+        String query = "UPDATE [dbo].[Board] SET [isPublic] = ? WHERE [BoardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         pstmt.setString(1, boardID);
+        pstmt.setBoolean(2, publiced);
         pstmt.executeUpdate();
     }
 
