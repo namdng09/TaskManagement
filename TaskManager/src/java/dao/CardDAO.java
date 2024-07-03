@@ -63,11 +63,11 @@ public class CardDAO {
         pstmt.executeUpdate();
     }
 
-    public void updateCardDueDate(String cardID, Date dueDate) throws SQLException{
+    public void updateCardDueDate(String cardID, Timestamp dueDate) throws SQLException{
         String query = "UPDATE [dbo].[Card] SET [DueDate] = ? WHERE [CardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
-        pstmt.setDate(1, dueDate);
+        pstmt.setTimestamp(1, dueDate);
         pstmt.setString(2, cardID);
 
         pstmt.executeUpdate();
