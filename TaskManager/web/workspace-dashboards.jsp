@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -264,7 +265,9 @@
                                                                 <div class="job-listing-footer">
                                                                     <ul>
                                                                         <li><i class="icon-material-outline-business-center"></i> ${board.owner}</li>
-                                                                        <li><i class="icon-material-outline-access-time"></i> ${board.createDate}</li>
+                                                                        <li><i class="icon-material-outline-access-time"></i>
+                                                                            <fmt:formatDate value="${board.createDate}" pattern="yyyy-MM-dd"/>
+                                                                        </li>
                                                                         <li>
                                                                             <i class="<c:choose>
                                                                                    <c:when test="${board.publiced}">
