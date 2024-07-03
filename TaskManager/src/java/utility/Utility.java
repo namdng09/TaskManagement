@@ -1,40 +1,39 @@
 package utility;
 
-
 import java.util.UUID;
 import java.sql.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Utility class providing various helper methods.
- * 
+ *
  * This class includes a method to generate a unique User UID using UUID.
- * 
+ *
  * @author namdng09
  */
 public class Utility {
-    
+
     /**
      * Generates a unique User UID using UUID.
-     * 
+     *
      * @return The generated User UID as a String.
      */
     public String generateUserUID() {
         // Generate a random UUID (Universally Unique Identifier)
         UUID uuid = UUID.randomUUID();
-        
+
         // Convert UUID to a string
         String userUID = uuid.toString();
-        
+
         // Return the generated user UID
         return userUID;
     }
-    
+
     public String formatNameString(String name) {
         StringBuilder stringBuilder = new StringBuilder();
         String words[] = name.split("\\s+");
         for (String word : words) {
-            stringBuilder.append(word.substring(0,1).toUpperCase()).append(word.substring(1).toLowerCase()).append(" ");
+            stringBuilder.append(word.substring(0, 1).toUpperCase()).append(word.substring(1).toLowerCase()).append(" ");
         }
         return stringBuilder.toString().trim();
     }
@@ -60,10 +59,10 @@ public class Utility {
         return lastID;
     }
 
-    public Date getCurrentDate() {
-        LocalDate currentDate = LocalDate.now(); // Get current date
-        Date sqlDate = Date.valueOf(currentDate); // Convert to java.sql.Date
-        return sqlDate;
+    public Timestamp getCurrentDate() {
+        LocalDateTime currentDateTime = LocalDateTime.now(); // Get current date and time
+        Timestamp timestamp = Timestamp.valueOf(currentDateTime); // Convert to java.sql.Timestamp
+        return timestamp;
     }
 
 }
