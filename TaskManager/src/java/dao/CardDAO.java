@@ -7,7 +7,7 @@ public class CardDAO {
 
     public void insertCard(Card card, String listTaskID) throws SQLException {
         String query = "INSERT INTO [dbo].[Card]"
-                + "([CardID],[ListID],[Name],[Description],[CreatedDate])"
+                + "([CardID],[ListTaskID],[Name],[Description],[CreatedDate])"
                 + "VALUES (?,?,?,?,?)";
         PreparedStatement pstmt = createPreparedStatement(query);
         pstmt.setString(1, card.getCardID());
