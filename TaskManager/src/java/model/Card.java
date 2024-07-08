@@ -146,6 +146,16 @@ public class Card {
         }
     }
 
+    public void moveCard(String cardID, String newID) {
+        CardDAO cardDAO = new CardDAO();
+        try {
+            cardDAO.updateCardPosition(cardID, newID);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
     public void editCardName(String cardID, String name) {
         CardDAO cardDAO = new CardDAO();
         try {

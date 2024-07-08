@@ -69,8 +69,6 @@ public class Comment {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
-    
 
     @Override
     public String toString() {
@@ -82,14 +80,16 @@ public class Comment {
         ArrayList<Comment> comments = new ArrayList<>();
         try {
             ResultSet rs = commentDAO.getAllCommentByCardID(cardID);
-            String id = rs.getString("CommentID");
-            String fName = rs.getString("FirstName");
-            String lName = rs.getString("LastName");
-            Timestamp date = rs.getTimestamp("CreatedDate");
-            String textComment = rs.getString("Comment");
+            while (rs.next()) {
+                String id = rs.getString("CommentID");
+                String fName = rs.getString("FirstName");
+                String lName = rs.getString("LastName");
+                Timestamp date = rs.getTimestamp("CreatedDate");
+                String textComment = rs.getString("Comment");
 
-            Comment commentObj = new Comment(id, fName, lName, date, textComment);
-            comments.add(commentObj);
+                Comment commentObj = new Comment(id, fName, lName, date, textComment);
+                comments.add(commentObj);
+            }
         } catch (SQLException e) {
             //TODO: handle exception
             System.out.println("ERROR: " + e.getMessage());

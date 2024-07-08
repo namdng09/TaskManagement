@@ -21,7 +21,8 @@ public class Board {
     private String description;
     private ArrayList<ListTask> listOfTask;
 
-    public Board() {}
+    public Board() {
+    }
 
     public Board(String boardID, String boardName, String owner, Timestamp createDate, boolean publiced, boolean completed, String image, String description, ArrayList<ListTask> listOfTask) {
         this.boardID = boardID;
@@ -56,8 +57,16 @@ public class Board {
         this.description = description;
     }
 
-    // Getter and Setter methods
+    public Board(String id, String name, boolean permissions, boolean status, String backgroundImage, String description) {
+        this.boardID = id;
+        this.boardName = name;
+        this.publiced = permissions;
+        this.completed = status;
+        this.image = backgroundImage;
+        this.description = description;
+    }
 
+    // Getter and Setter methods
     public String getBoardID() {
         return boardID;
     }
@@ -232,6 +241,16 @@ public class Board {
         }
     }
 
+    public void editBoard(Board board) {
+        BoardDAO boardDAO = new BoardDAO();
+        try {
+            boardDAO.updateBoard(board);
+        } catch (SQLException e) {
+            // Handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
     public void editBoardName(String boardID, String newName) {
         BoardDAO boardDAO = new BoardDAO();
         try {
@@ -283,7 +302,7 @@ public class Board {
             System.out.println("ERROR: " + e.getMessage());
         }
     }
-    
+
     public void addBookmark(String useruid, String boardID) {
 
     }
