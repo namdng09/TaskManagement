@@ -35,10 +35,14 @@ public class CardDAO {
     }
 
     public void deleteCard(String cardID) throws SQLException {
-        String query = "DELETE FROM [dbo].[Card] WHERE [CardID] = ?";
-        PreparedStatement pstmt = this.createPreparedStatement(query);
-        // modify the query here
+        String query = "DELETE FROM [dbo].[CheckList] WHERE CardID = ?; "
+                + "DELETE FROM [dbo].[Comment] WHERE CardID = ?; "
+                + "DELETE FROM [dbo].[Card] WHERE [CardID] = ?;";
+        PreparedStatement pstmt = createPreparedStatement(query);
+
         pstmt.setString(1, cardID);
+        pstmt.setString(2, cardID);
+        pstmt.setString(3, cardID);
 
         pstmt.executeUpdate();
     }
@@ -53,7 +57,17 @@ public class CardDAO {
         pstmt.executeUpdate();
     }
 
-    public void updateCardDescription(String cardID, String description) throws SQLException{
+    public void updateCardPosition(String cardID, String newListTaskID) throws SQLException {
+        String query = "UPDATE [dbo].[Card] SET [ListTaskID] = ? WHERE [CardID] = ?";
+        PreparedStatement pstmt = this.createPreparedStatement(query);
+        // modify the query here
+        pstmt.setString(1, newListTaskID);
+        pstmt.setString(2, cardID);
+
+        pstmt.executeUpdate();
+    }
+
+    public void updateCardDescription(String cardID, String description) throws SQLException {
         String query = "UPDATE [dbo].[Card] SET [Description] = ? WHERE [CardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
@@ -63,7 +77,7 @@ public class CardDAO {
         pstmt.executeUpdate();
     }
 
-    public void updateCardDueDate(String cardID, Timestamp dueDate) throws SQLException{
+    public void updateCardDueDate(String cardID, Timestamp dueDate) throws SQLException {
         String query = "UPDATE [dbo].[Card] SET [DueDate] = ? WHERE [CardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
@@ -72,6 +86,7 @@ public class CardDAO {
 
         pstmt.executeUpdate();
     }
+
     /**
      * Create instance for PreparedStatement class
      *
