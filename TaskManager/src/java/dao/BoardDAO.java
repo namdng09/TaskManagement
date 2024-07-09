@@ -93,8 +93,7 @@ public class BoardDAO {
                 + "[Board].[CreatedDate], [Board].[isPublic], [Board].[isCompleted], "
                 + "[Board].[Description], [Board].[Image] "
                 + "FROM [dbo].[Board] "
-                + "JOIN [dbo].[BoardMember] ON [Board].[BoardID] = [BoardMember].[BoardID] "
-                + "JOIN [dbo].[User] ON [BoardMember].[User_UID] = [User].[User_UID] "
+                + "JOIN [dbo].[User] ON [Board].[User_UID] = [User].[User_UID] "
                 + "WHERE [Board].[BoardID] = ?";
         PreparedStatement pstmt = createPreparedStatement(query);
         pstmt.setString(1, boardID);
@@ -130,7 +129,7 @@ public class BoardDAO {
                 + "[Board].[Description], [Board].[Image] "
                 + "FROM [dbo].[Board] "
                 + "JOIN [dbo].[BoardMember] ON [Board].[BoardID] = [BoardMember].[BoardID] "
-                + "JOIN [dbo].[User] ON [BoardMember].[User_UID] = [User].[User_UID] "
+                + "JOIN [dbo].[User] ON [Board].[User_UID] = [User].[User_UID] "
                 + "WHERE [BoardMember].[User_UID] = ?";
         PreparedStatement pstmt = createPreparedStatement(query);
         pstmt.setString(1, useruid);
