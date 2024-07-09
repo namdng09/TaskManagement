@@ -53,8 +53,8 @@
         <servlet-class>controller.CardServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CheckListServlet</servlet-name>
-        <servlet-class>controller.CheckListServlet</servlet-class>
+        <servlet-name>ManagerServlet</servlet-name>
+        <servlet-class>controller.ManagerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -89,7 +89,7 @@
         <url-pattern>/card</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CheckListServlet</servlet-name>
-        <url-pattern>/checkList</url-pattern>
+        <servlet-name>ManagerServlet</servlet-name>
+        <url-pattern>/manager</url-pattern>
     </servlet-mapping>
 </web-app>

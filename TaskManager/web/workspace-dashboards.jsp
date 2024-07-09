@@ -57,7 +57,7 @@
                                     <div class="header-notifications-trigger">
                                         <a href="#">
                                             <div class="user-avatar status-online">
-                                                <img src="images/user-avatar-small-01.jpg" alt="" />
+                                                <img src="images/user-avatar.jpg" alt="" />
                                             </div>
                                         </a>
                                     </div>
@@ -69,7 +69,7 @@
                                             <!-- User Name / Avatar -->
                                             <div class="user-details">
                                                 <div class="user-avatar status-online">
-                                                    <img src="images/user-avatar-small-01.jpg" alt="" />
+                                                    <img src="images/user-avatar.jpg" alt="" />
                                                 </div>
                                                 <div class="user-name">
                                                     Tom Smith <span>Freelancer</span>
@@ -159,28 +159,10 @@
                                     <ul data-submenu-title="Organize and Manage">
                                         <li>
                                             <a href="#"
-                                               ><i class="icon-material-outline-business-center"></i>
-                                                User</a
-                                            >
-                                            <ul>
-                                                <li>
-                                                    <a href="#"
-                                                       >Manage User <span class="nav-tag">3</span></a
-                                                    >
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="#"
                                                ><i class="icon-material-outline-assignment"></i>
                                                 Boards</a
                                             >
                                             <ul>
-                                                <li>
-                                                    <a href="#"
-                                                       >Manage Boards <span class="nav-tag">2</span></a
-                                                    >
-                                                </li>
                                                 <li>
                                                     <a href="createBoard">Create Broad</a>
                                                 </li>
@@ -238,9 +220,13 @@
                                 <div class="dashboard-box margin-top-0">
 
                                     <!-- Headline -->
-                                    <div class="headline">
+                                    <div class="headline d-flex justify-content-between align-items-center">
                                         <h3><i class="icon-material-outline-dashboard"></i> YOUR WORKSPACES</h3>
+                                        <form class="form-inline ml-auto" method="post" action="home">
+                                            <input class="form-control mr-2" type="text" name="searchBoard" placeholder="Search board" aria-label="Search">
+                                        </form>
                                     </div>
+
 
                                     <div class="content">
                                         <ul class="dashboard-box-list">
@@ -253,13 +239,13 @@
                                                         <div class="job-listing-details">
 
                                                             <!-- Logo -->
-                                                            <a href="#" class="job-listing-company-logo">
+                                                            <a href="board?boardID=${board.boardID}" class="job-listing-company-logo">
                                                                 <img src="${board.image}" alt="">
                                                             </a>
 
                                                             <!-- Details -->
                                                             <div class="job-listing-description">
-                                                                <h3 class="job-listing-title"><a href="#">${board.boardName}</a></h3>
+                                                                <h3 class="job-listing-title"><a href="board?boardID=${board.boardID}">${board.boardName}</a></h3>
 
                                                                 <!-- Job Listing Footer -->
                                                                 <div class="job-listing-footer">
@@ -313,7 +299,8 @@
                                                     </div>
                                                     <!-- Buttons -->
                                                     <div class="buttons-to-right">
-                                                        <a href="#" class="button red ripple-effect ico" title="Remove" data-tippy-placement="left"><i class="icon-feather-trash-2"></i></a>
+                                                        <a href="manager?boardID=${board.boardID}&action=manageUser" class="button ripple-effect"><i class="icon-material-outline-supervisor-account"></i> Manage Bidders </a>
+                                                        <a href="manager?boardID=${board.boardID}&action=manageBoard" class="button red ripple-effect ico" title="Manage" data-tippy-placement="left"><i class="icon-feather-edit"></i></a>
                                                     </div>
                                                 </li>
                                             </c:forEach>
@@ -321,7 +308,26 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <!-- Pagination -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="pagination-container margin-top-30 margin-bottom-60">
+                                        <nav class="pagination">
+                                            <ul>
+                                                <c:if test="${currentPage > 1}">
+                                                    <li class="pagination-arrow"><a href="home?page=${currentPage - 1}" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-left"></i></a></li>
+                                                        </c:if>
+                                                        <c:forEach begin="1" end="${totalPages}" var="i">
+                                                    <li><a href="home?page=${i}" class="${currentPage == i ? 'current-page' : 'ripple-effect'}">${i}</a></li>
+                                                    </c:forEach>
+                                                    <c:if test="${currentPage < totalPages}">
+                                                    <li class="pagination-arrow"><a href="home?page=${currentPage + 1}" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-right"></i></a></li>
+                                                        </c:if>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- Row / End -->
 
