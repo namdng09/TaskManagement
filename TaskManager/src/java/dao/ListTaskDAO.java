@@ -17,10 +17,16 @@ public class ListTaskDAO {
     }
 
     public void deleteListTask(String listTaskID) throws SQLException {
-        String query = "DELETE FROM [dbo].[ListTask] WHERE [ListTaskID] = ?";
+        String query = "DELETE FROM CheckList WHERE CardID IN (SELECT CardID FROM Card WHERE ListTaskID = ?); " +
+                   "DELETE FROM Comment WHERE CardID IN (SELECT CardID FROM Card WHERE ListTaskID = ?); " +
+                   "DELETE FROM Card WHERE ListTaskID = ?; " +
+                   "DELETE FROM ListTask WHERE ListTaskID = ?;";
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
         pstmt.setString(1, listTaskID);
+        pstmt.setString(2, listTaskID);
+        pstmt.setString(3, listTaskID);
+        pstmt.setString(4, listTaskID);
         pstmt.executeUpdate();
     }
 
@@ -30,6 +36,7 @@ public class ListTaskDAO {
         // modify the query here
         pstmt.setString(1, newName);
         pstmt.setString(2, listTaskID);
+        pstmt.executeUpdate();
     }
 
     public ResultSet getAllListTaskByBoardID(String boardID) throws SQLException {

@@ -1,19 +1,34 @@
 package dao;
 
 import java.sql.*;
+import model.Comment;
 
 public class CommentDAO {
 
     public ResultSet getAllCommentByCardID(String cardID) throws SQLException {
-        String query = "SELECT [CommentID],[User].[FirstName],[User].[LastName],[CreatedDate],[Comment]"
-                + "FROM [dbo].[Comment]"
-                + "INNER JOIN [dbo].[User] ON [User].[User_UID] = [Comment].[User_UID]"
-                + "WHERE [CardID] = ?"
-                + "GROUP BY [CommentID],[User].[FirstName],[User].[LastName],[Comment]";
+        String query = "SELECT [CommentID], [User].[FirstName], [User].[LastName], [CreatedDate], CAST([Comment] AS NVARCHAR(MAX)) AS [Comment]\n"
+                + "FROM [dbo].[Comment]\n"
+                + "INNER JOIN [dbo].[User] ON [User].[User_UID] = [Comment].[User_UID]\n"
+                + "WHERE [CardID] = ?\n"
+                + "GROUP BY [CommentID], [User].[FirstName], [User].[LastName], [CreatedDate], CAST([Comment] AS NVARCHAR(MAX))\n"
+                + "ORDER BY [CreatedDate] DESC;";
         PreparedStatement pstmt = createPreparedStatement(query);
         // modify the query here
         pstmt.setString(1, cardID);
         return executeQuery(pstmt);
+    }
+
+    public void insertComment(Comment comment, String cardID, String user_UID) throws SQLException {
+        String query = "INSERT INTO [dbo].[Comment] ([CommentID], [CardID], [User_UID], [CreatedDate], [Comment]) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement pstmt = createPreparedStatement(query);
+
+        pstmt.setString(1, comment.getCommentID());
+        pstmt.setString(2, cardID);
+        pstmt.setString(3, user_UID);
+        pstmt.setTimestamp(4, comment.getCreateDate());
+        pstmt.setString(5, comment.getComment());
+
+        pstmt.executeUpdate();
     }
 
     public void deleteComment(String commentID) throws SQLException {
@@ -41,6 +56,7 @@ public class CommentDAO {
         // modify the query here
         return executeQuery(pstmt);
     }
+
     /**
      * Create instance for PreparedStatement class
      *

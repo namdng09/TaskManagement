@@ -89,5 +89,24 @@ public class ListTask {
             System.out.println("ERROR: " + e.getMessage());
         }
     }
+    
+    public void removeListTask(String listTaskID) {
+        ListTaskDAO listTaskDAO = new ListTaskDAO();
+        try {
+            listTaskDAO.deleteListTask(listTaskID);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
 
+    public void renameListTask(String listTaskID, String name) {
+        ListTaskDAO listTaskDAO = new ListTaskDAO();
+        try {
+            listTaskDAO.renameListTask(listTaskID, name);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
 }

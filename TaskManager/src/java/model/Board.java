@@ -8,23 +8,23 @@ import java.util.Set;
 import dao.BoardDAO;
 import dao.UserDAO;
 import utility.Utility;
-import utility.Validation;
 
 public class Board {
 
     private String boardID;
     private String boardName;
     private String owner;
-    private Date createDate;
+    private Timestamp createDate;
     private boolean publiced;
     private boolean completed;
     private String image;
     private String description;
     private ArrayList<ListTask> listOfTask;
 
-    public Board() {}
+    public Board() {
+    }
 
-    public Board(String boardID, String boardName, String owner, Date createDate, boolean publiced, boolean completed, String image, String description, ArrayList<ListTask> listOfTask) {
+    public Board(String boardID, String boardName, String owner, Timestamp createDate, boolean publiced, boolean completed, String image, String description, ArrayList<ListTask> listOfTask) {
         this.boardID = boardID;
         this.boardName = boardName;
         this.owner = owner;
@@ -36,7 +36,7 @@ public class Board {
         this.listOfTask = listOfTask;
     }
 
-    public Board(String boardID, String boardName, String owner, Date createDate, boolean publiced, boolean completed, String image, String description) {
+    public Board(String boardID, String boardName, String owner, Timestamp createDate, boolean publiced, boolean completed, String image, String description) {
         this.boardID = boardID;
         this.boardName = boardName;
         this.owner = owner;
@@ -47,7 +47,7 @@ public class Board {
         this.description = description;
     }
 
-    public Board(String boardID, String boardName, Date createDate, boolean publiced, boolean completed, String image, String description) {
+    public Board(String boardID, String boardName, Timestamp createDate, boolean publiced, boolean completed, String image, String description) {
         this.boardID = boardID;
         this.boardName = boardName;
         this.createDate = createDate;
@@ -57,8 +57,16 @@ public class Board {
         this.description = description;
     }
 
-    // Getter and Setter methods
+    public Board(String id, String name, boolean permissions, boolean status, String backgroundImage, String description) {
+        this.boardID = id;
+        this.boardName = name;
+        this.publiced = permissions;
+        this.completed = status;
+        this.image = backgroundImage;
+        this.description = description;
+    }
 
+    // Getter and Setter methods
     public String getBoardID() {
         return boardID;
     }
@@ -75,11 +83,11 @@ public class Board {
         this.boardName = boardName;
     }
 
-    public Date getCreateDate() {
+    public Timestamp getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }
 
@@ -139,7 +147,7 @@ public class Board {
             if (rs.next()) {
                 String id = rs.getString("BoardID");
                 String name = rs.getString("Name");
-                Date date = rs.getDate("CreatedDate");
+                Timestamp date = rs.getTimestamp("CreatedDate");
                 boolean accessControl = rs.getBoolean("isPublic");
                 boolean completed = rs.getBoolean("isCompleted");
                 String des = rs.getString("Description");
@@ -164,7 +172,7 @@ public class Board {
                 String id = rs.getString("BoardID");
                 String name = rs.getString("Name");
                 String owner = rs.getString("FullName");
-                Date date = rs.getDate("CreatedDate");
+                Timestamp date = rs.getTimestamp("CreatedDate");
                 boolean publiced = rs.getBoolean("isPublic");
                 boolean completed = rs.getBoolean("isCompleted");
                 String description = rs.getString("Description");
@@ -189,7 +197,7 @@ public class Board {
                 String id = rs.getString("BoardID");
                 String name = rs.getString("Name");
                 String owner = rs.getString("FullName");
-                Date date = rs.getDate("CreatedDate");
+                Timestamp date = rs.getTimestamp("CreatedDate");
                 boolean publiced = rs.getBoolean("isPublic");
                 boolean completed = rs.getBoolean("isCompleted");
                 String description = rs.getString("Description");
@@ -212,7 +220,7 @@ public class Board {
             String prefix = "BR";
             ResultSet latestIDResultSet = boardDAO.getLastestBoardID();
             String id = utils.generateID(prefix, latestIDResultSet);
-            Date currentDate = utils.getCurrentDate();
+            Timestamp currentDate = utils.getCurrentDate();
             boolean completed = false;
             Board board = new Board(id, name, currentDate, accessControl, completed, image, description);
             boardDAO.insertBoard(board, useruid);
@@ -223,10 +231,20 @@ public class Board {
         }
     }
 
-    public void changeAccessControl(String boardID) {
+    public void changeAccessControl(String boardID, boolean publiced) {
         BoardDAO boardDAO = new BoardDAO();
         try {
-            boardDAO.toggleIsPublic(boardID);
+            boardDAO.toggleIsPublic(boardID, publiced);
+        } catch (SQLException e) {
+            // Handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    public void editBoard(Board board) {
+        BoardDAO boardDAO = new BoardDAO();
+        try {
+            boardDAO.updateBoard(board);
         } catch (SQLException e) {
             // Handle exception
             System.out.println("ERROR: " + e.getMessage());
@@ -284,7 +302,7 @@ public class Board {
             System.out.println("ERROR: " + e.getMessage());
         }
     }
-    
+
     public void addBookmark(String useruid, String boardID) {
 
     }
@@ -344,6 +362,16 @@ public class Board {
         if (this.isExistBoardName(name)) {
             message = "Board name is already existed!";
             throw new Exception(message);
+        }
+    }
+
+    public void deleteBoard(String boardID) {
+        BoardDAO boardDAO = new BoardDAO();
+        try {
+            boardDAO.deleteBoard(boardID);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR " + e.getMessage());
         }
     }
 }

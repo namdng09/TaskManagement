@@ -1,22 +1,28 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.sql.*;
 import dao.CommentDAO;
+import utility.Utility;
 
 public class Comment {
 
     private String commentID;
     private String firstName;
     private String lastName;
-    private Date createDate;
+    private Timestamp createDate;
     private String comment;
 
     public Comment() {
     }
 
-    public Comment(String commentID, String firstName, String lastName, Date createDate, String comment) {
+    public Comment(String commentID, Timestamp createDate, String comment) {
+        this.commentID = commentID;
+        this.createDate = createDate;
+        this.comment = comment;
+    }
+
+    public Comment(String commentID, String firstName, String lastName, Timestamp createDate, String comment) {
         this.commentID = commentID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,11 +38,11 @@ public class Comment {
         this.commentID = commentID;
     }
 
-    public Date getCreateDate() {
+    public Timestamp getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }
 
@@ -63,8 +69,6 @@ public class Comment {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
-    
 
     @Override
     public String toString() {
@@ -76,14 +80,16 @@ public class Comment {
         ArrayList<Comment> comments = new ArrayList<>();
         try {
             ResultSet rs = commentDAO.getAllCommentByCardID(cardID);
-            String id = rs.getString("CommentID");
-            String fName = rs.getString("FirstName");
-            String lName = rs.getString("LastName");
-            Date date = rs.getDate("CreatedDate");
-            String textComment = rs.getString("Comment");
+            while (rs.next()) {
+                String id = rs.getString("CommentID");
+                String fName = rs.getString("FirstName");
+                String lName = rs.getString("LastName");
+                Timestamp date = rs.getTimestamp("CreatedDate");
+                String textComment = rs.getString("Comment");
 
-            Comment commentObj = new Comment(id, fName, lName, date, textComment);
-            comments.add(commentObj);
+                Comment commentObj = new Comment(id, fName, lName, date, textComment);
+                comments.add(commentObj);
+            }
         } catch (SQLException e) {
             //TODO: handle exception
             System.out.println("ERROR: " + e.getMessage());
@@ -91,27 +97,22 @@ public class Comment {
         return comments;
     }
 
-    public String generateCommentID() {
+    public void createComment(String cardID, String user_UID, String text) {
         CommentDAO commentDAO = new CommentDAO();
-        String lastID = null;
-        try {
-            ResultSet rs = commentDAO.getLastestCommentID();
-            if (rs.next()) {
-                lastID = rs.getString("CommentID");
-            }
+        Utility utils = new Utility();
 
-            if (lastID == null) {
-                lastID = "CO0001";
-            } else {
-                int idNum = Integer.parseInt(lastID.substring(2));
-                idNum++;
-                lastID = String.format("CO%04d", idNum);
-            }
+        try {
+            String prefix = "CO";
+            ResultSet latestIDResultSet = commentDAO.getLastestCommentID();
+            String id = utils.generateID(prefix, latestIDResultSet);
+            Timestamp currentDate = utils.getCurrentDate();
+
+            Comment comment = new Comment(id, currentDate, text);
+            commentDAO.insertComment(comment, cardID, user_UID);
         } catch (SQLException e) {
             //TODO: handle exception
             System.out.println("ERROR: " + e.getMessage());
         }
-        return lastID;
     }
 
     public void editComment(String commentID, String comment) {

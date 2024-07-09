@@ -13,7 +13,7 @@ public class BoardDAO {
         pstmt.setString(1, board.getBoardID());
         pstmt.setString(2, useruid);
         pstmt.setString(3, board.getBoardName());
-        pstmt.setDate(4, board.getCreateDate());
+        pstmt.setTimestamp(4, board.getCreateDate());
         pstmt.setBoolean(5, board.isPubliced());
         pstmt.setBoolean(6, board.isCompleted());
         pstmt.setString(7, board.getDescription());
@@ -22,10 +22,37 @@ public class BoardDAO {
         pstmt.executeUpdate();
     }
 
+    public void updateBoard(Board board) throws SQLException {
+        String query = "UPDATE [dbo].[Board] SET[Name] =  ?, "
+                + "[isPublic] = ?, [isCompleted] = ?, "
+                + "[Description] = ?, [Image ] = ? "
+                + "WHERE[BoardID] =  ? ";
+        PreparedStatement pstmt = createPreparedStatement(query);
+        pstmt.setString(1, board.getBoardName());
+        pstmt.setBoolean(2, board.isPubliced());
+        pstmt.setBoolean(3, board.isCompleted());
+        pstmt.setString(4, board.getDescription());
+        pstmt.setString(5, board.getImage());
+        pstmt.setString(6, board.getBoardID());
+
+        pstmt.executeUpdate();
+    }
+
     public void deleteBoard(String boardID) throws SQLException {
-        String query = "DELETE FROM [dbo].[Board] WHERE [BoardID] = ?";
+        String query = "DELETE FROM CheckList WHERE CardID IN (SELECT Card.CardID FROM Card WHERE ListTaskID IN (SELECT ListTask.ListTaskID FROM ListTask WHERE BoardID = ?));\n"
+                + "DELETE FROM Comment WHERE CardID IN (SELECT Card.CardID FROM Card WHERE ListTaskID IN (SELECT ListTask.ListTaskID FROM ListTask WHERE BoardID = ?));\n"
+                + "DELETE FROM Card WHERE ListTaskID IN (SELECT ListTask.ListTaskID FROM ListTask WHERE BoardID = ?);\n"
+                + "DELETE FROM ListTask WHERE BoardID = ?;\n"
+                + "DELETE FROM BoardMember WHERE BoardID = ?;"
+                + "DELETE FROM Board WHERE BoardID = ?;";
+
         PreparedStatement pstmt = this.createPreparedStatement(query);
         pstmt.setString(1, boardID);
+        pstmt.setString(2, boardID);
+        pstmt.setString(3, boardID);
+        pstmt.setString(4, boardID);
+        pstmt.setString(5, boardID);
+        pstmt.setString(6, boardID);
 
         pstmt.executeUpdate();
     }
@@ -40,9 +67,8 @@ public class BoardDAO {
     }
 
     public void deleteBoardMember(String useruid, String boardID) throws SQLException {
-        String query = "DELETE FROM [dbo].[BoardMember]"
-                + "WHERE [User_UID] = ?"
-                + "AND [BoardID] = ?";
+        String query = "DELETE FROM [dbo].[BoardMember] "
+                + "WHERE [User_UID] = ? AND [BoardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         pstmt.setString(1, useruid);
         pstmt.setString(2, boardID);
@@ -122,10 +148,11 @@ public class BoardDAO {
         return executeQuery(pstmt);
     }
 
-    public void toggleIsPublic(String boardID) throws SQLException {
-        String query = "UPDATE [dbo].[Board] SET [isPublic] = NOT [isPublic] WHERE [BoardID] = ?";
+    public void toggleIsPublic(String boardID, boolean publiced) throws SQLException {
+        String query = "UPDATE [dbo].[Board] SET [isPublic] = ? WHERE [BoardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         pstmt.setString(1, boardID);
+        pstmt.setBoolean(2, publiced);
         pstmt.executeUpdate();
     }
 

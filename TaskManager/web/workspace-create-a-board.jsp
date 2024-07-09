@@ -127,7 +127,7 @@
                                     <div class="header-notifications-trigger">
                                         <a href="#">
                                             <div class="user-avatar status-online">
-                                                <img src="images/user-avatar-small-01.jpg" alt="" />
+                                                <img src="images/user-avatar.jpg" alt="" />
                                             </div>
                                         </a>
                                     </div>
@@ -139,7 +139,7 @@
                                             <!-- User Name / Avatar -->
                                             <div class="user-details">
                                                 <div class="user-avatar status-online">
-                                                    <img src="images/user-avatar-small-01.jpg" alt="" />
+                                                    <img src="images/user-avatar.jpg" alt="" />
                                                 </div>
                                                 <div class="user-name">
                                                     Tom Smith <span>Freelancer</span>
@@ -161,7 +161,7 @@
                                                 >
                                             </li>
                                             <li>
-                                                <a href="#"
+                                                <a href="logout"
                                                    ><i
                                                         class="icon-material-outline-power-settings-new"
                                                         ></i>
@@ -227,19 +227,6 @@
                                     </ul>
 
                                     <ul data-submenu-title="Organize and Manage">
-                                        <li>
-                                            <a href="#"
-                                               ><i class="icon-material-outline-business-center"></i>
-                                                User</a
-                                            >
-                                            <ul>
-                                                <li>
-                                                    <a href="#"
-                                                       >Manage User <span class="nav-tag">3</span></a
-                                                    >
-                                                </li>
-                                            </ul>
-                                        </li>
                                         <li class="active-submenu">
                                             <a href="#"
                                                ><i class="icon-material-outline-assignment"></i>
@@ -247,12 +234,7 @@
                                             >
                                             <ul>
                                                 <li>
-                                                    <a href="#"
-                                                       >Manage Boards <span class="nav-tag">2</span></a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a href="createBoard">Create Broad</a>
+                                                    <a href="createBoard">Create Board</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -266,7 +248,7 @@
                                             >
                                         </li>
                                         <li>
-                                            <a href="#"
+                                            <a href="logout"
                                                ><i
                                                     class="icon-material-outline-power-settings-new"
                                                     ></i>

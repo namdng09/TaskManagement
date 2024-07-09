@@ -7,14 +7,14 @@ public class CardDAO {
 
     public void insertCard(Card card, String listTaskID) throws SQLException {
         String query = "INSERT INTO [dbo].[Card]"
-                + "([CardID],[ListID],[Name],[Description],[CreatedDate])"
+                + "([CardID],[ListTaskID],[Name],[Description],[CreatedDate])"
                 + "VALUES (?,?,?,?,?)";
         PreparedStatement pstmt = createPreparedStatement(query);
         pstmt.setString(1, card.getCardID());
         pstmt.setString(2, listTaskID);
         pstmt.setString(3, card.getCardName());
         pstmt.setString(4, card.getDescription());
-        pstmt.setDate(5, card.getCreatedDate());
+        pstmt.setTimestamp(5, card.getCreatedDate());
 
         pstmt.executeUpdate();
     }
@@ -35,10 +35,14 @@ public class CardDAO {
     }
 
     public void deleteCard(String cardID) throws SQLException {
-        String query = "DELETE FROM [dbo].[Card] WHERE [CardID] = ?";
-        PreparedStatement pstmt = this.createPreparedStatement(query);
-        // modify the query here
+        String query = "DELETE FROM [dbo].[CheckList] WHERE CardID = ?; "
+                + "DELETE FROM [dbo].[Comment] WHERE CardID = ?; "
+                + "DELETE FROM [dbo].[Card] WHERE [CardID] = ?;";
+        PreparedStatement pstmt = createPreparedStatement(query);
+
         pstmt.setString(1, cardID);
+        pstmt.setString(2, cardID);
+        pstmt.setString(3, cardID);
 
         pstmt.executeUpdate();
     }
@@ -53,7 +57,17 @@ public class CardDAO {
         pstmt.executeUpdate();
     }
 
-    public void updateCardDescription(String cardID, String description) throws SQLException{
+    public void updateCardPosition(String cardID, String newListTaskID) throws SQLException {
+        String query = "UPDATE [dbo].[Card] SET [ListTaskID] = ? WHERE [CardID] = ?";
+        PreparedStatement pstmt = this.createPreparedStatement(query);
+        // modify the query here
+        pstmt.setString(1, newListTaskID);
+        pstmt.setString(2, cardID);
+
+        pstmt.executeUpdate();
+    }
+
+    public void updateCardDescription(String cardID, String description) throws SQLException {
         String query = "UPDATE [dbo].[Card] SET [Description] = ? WHERE [CardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
@@ -63,15 +77,16 @@ public class CardDAO {
         pstmt.executeUpdate();
     }
 
-    public void updateCardDueDate(String cardID, Date dueDate) throws SQLException{
+    public void updateCardDueDate(String cardID, Timestamp dueDate) throws SQLException {
         String query = "UPDATE [dbo].[Card] SET [DueDate] = ? WHERE [CardID] = ?";
         PreparedStatement pstmt = this.createPreparedStatement(query);
         // modify the query here
-        pstmt.setDate(1, dueDate);
+        pstmt.setTimestamp(1, dueDate);
         pstmt.setString(2, cardID);
 
         pstmt.executeUpdate();
     }
+
     /**
      * Create instance for PreparedStatement class
      *

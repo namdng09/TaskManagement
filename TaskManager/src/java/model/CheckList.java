@@ -49,18 +49,19 @@ public class CheckList {
         return "CheckList{" + "checkListID=" + checkListID + ", checkListTitle=" + checkListTitle + ", checked=" + checked + '}';
     }
 
-
     public ArrayList<CheckList> getAllCheckListByCardID(String cardID) {
         CheckListDAO checkListDAO = new CheckListDAO();
         ArrayList<CheckList> checkLists = new ArrayList<>();
         try {
             ResultSet rs = checkListDAO.getAllCheckListByCardID(cardID);
-            String id = rs.getString("CheckListID");
-            String tilte = rs.getString("Title");
-            boolean isChecked = rs.getBoolean("isChecked");
+            while (rs.next()) {
+                String id = rs.getString("CheckListID");
+                String tilte = rs.getString("Title");
+                boolean isChecked = rs.getBoolean("isChecked");
 
-            CheckList checkList = new CheckList(id, tilte, isChecked);
-            checkLists.add(checkList);
+                CheckList checkList = new CheckList(id, tilte, isChecked);
+                checkLists.add(checkList);
+            }
         } catch (SQLException e) {
             //TODO: handle exception
             System.out.println("ERROR: " + e.getMessage());
