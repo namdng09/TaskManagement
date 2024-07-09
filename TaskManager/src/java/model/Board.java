@@ -147,6 +147,7 @@ public class Board {
             if (rs.next()) {
                 String id = rs.getString("BoardID");
                 String name = rs.getString("Name");
+                String fullNameOwner = rs.getString("FullName");
                 Timestamp date = rs.getTimestamp("CreatedDate");
                 boolean accessControl = rs.getBoolean("isPublic");
                 boolean completed = rs.getBoolean("isCompleted");
@@ -154,7 +155,7 @@ public class Board {
                 String img = rs.getString("Image");
                 ArrayList<ListTask> listTask = (new ListTask()).getAllListTaskByBoardID(id);
 
-                board = new Board(id, name, owner, date, accessControl, completed, img, des, listTask);
+                board = new Board(id, name, fullNameOwner, date, accessControl, completed, img, des, listTask);
             }
         } catch (SQLException e) {
             // Handle exception
