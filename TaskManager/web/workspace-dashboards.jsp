@@ -61,7 +61,7 @@
                                             </div>
                                         </a>
                                     </div>
-
+                                    <c:set var="user" value="${sessionScope.account}"/>
                                     <!-- Dropdown -->
                                     <div class="header-notifications-dropdown">
                                         <!-- User Status -->
@@ -72,7 +72,7 @@
                                                     <img src="images/user-avatar.jpg" alt="" />
                                                 </div>
                                                 <div class="user-name">
-                                                    Tom Smith <span>Freelancer</span>
+                                                    ${user.firstName} ${user.lastName}
                                                 </div>
                                             </div>
                                         </div>
@@ -85,7 +85,7 @@
                                                 >
                                             </li>
                                             <li>
-                                                <a href="#"
+                                                <a href="setting"
                                                    ><i class="icon-material-outline-settings"></i>
                                                     Settings</a
                                                 >
@@ -172,7 +172,7 @@
 
                                     <ul data-submenu-title="Account">
                                         <li>
-                                            <a href="#"
+                                            <a href="setting"
                                                ><i class="icon-material-outline-settings"></i>
                                                 Settings</a
                                             >

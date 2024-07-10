@@ -95,6 +95,7 @@
     </head>
 
     <body class="gray">
+        <c:set var="user" value="${requestScope.user}"/>
         <!-- Wrapper -->
         <div id="wrapper">
             <!-- Header Container
@@ -142,7 +143,7 @@
                                                     <img src="images/user-avatar.jpg" alt="" />
                                                 </div>
                                                 <div class="user-name">
-                                                    Tom Smith <span>Freelancer</span>
+                                                    ${user.firstName} ${user.lastName}
                                                 </div>
                                             </div>
                                         </div>
@@ -227,21 +228,21 @@
                                     </ul>
 
                                     <ul data-submenu-title="Organize and Manage">
-                                        <li class="active-submenu">
+                                        <li>
                                             <a href="#"
                                                ><i class="icon-material-outline-assignment"></i>
                                                 Dashboard</a
                                             >
                                             <ul>
                                                 <li>
-                                                    <a href="createBoard">Manage Board</a>
+                                                    <a href="createBoard">Create Board</a>
                                                 </li>
                                             </ul>
                                         </li>
                                     </ul>
 
                                     <ul data-submenu-title="Account">
-                                        <li>
+                                        <li class="active-submenu">
                                             <a href="setting"
                                                ><i class="icon-material-outline-settings"></i>
                                                 Settings</a
@@ -271,22 +272,17 @@
 
                         <!-- Dashboard Headline -->
                         <div class="dashboard-headline">
-                            <h3>${board.boardName}</h3>
+                            <h3>${user.firstName} ${user.lastName}</h3>
 
                             <!-- Breadcrumbs -->
                             <nav id="breadcrumbs" class="dark">
                                 <ul>
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Dashboard</a></li>
-                                    <li>Manage Board</li>
+                                    <li><a href="home">Home</a></li>
+                                    <li><a href="setting">Settings</a></li>
                                 </ul>
                             </nav>
                         </div>
-                        <c:set var="board" value="${requestScope.board}"/>
-                        <c:set var="member" value="${requestScope.member}"/>
-                        <form action="manager" method="post">
-                            <input type="hidden" id="boardID" name="boardID" value="${board.boardID}">
-                            <input type="hidden" id="action" name="action" value="manageBoard">
+                        <form action="setting" method="post">
                             <!-- Row -->
                             <div class="row">
 
@@ -296,7 +292,7 @@
 
                                         <!-- Headline -->
                                         <div class="headline">
-                                            <h3><i class="icon-feather-folder-plus"></i> Board Submission Form</h3>
+                                            <h3><i class="icon-feather-folder-plus"></i> User's Information Submission Form</h3>
                                         </div>
 
                                         <div class="content with-padding padding-bottom-10">
@@ -304,62 +300,25 @@
 
                                                 <div class="col-xl-4">
                                                     <div class="submit-field">
-                                                        <h5>Board Name</h5>
-                                                        <input type="text" name="boardName" class="with-border" value="${board.boardName}" required>
+                                                        <h5>First Name</h5>
+                                                        <input type="text" name="fName" class="with-border" value="${user.firstName}" required>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-xl-4">
                                                     <div class="submit-field">
-                                                        <h5>Viewing permissions</h5>
-                                                        <select class="selectpicker with-border" name="permissions" data-size="7" title="Select Viewing permissions" required>
-                                                            <option value="true" ${board.publiced ? 'selected' : ''}>Public</option>
-                                                            <option value="false" ${!board.publiced ? 'selected' : ''}>Private</option>
-                                                        </select>
+                                                        <h5>Last Name</h5>
+                                                        <input type="text" name="lName" class="with-border" value="${user.lastName}" required>
                                                     </div>
                                                 </div>
 
+                                            </div>
+                                            <div class="row">
                                                 <div class="col-xl-4">
                                                     <div class="submit-field">
-                                                        <h5>Status</h5>
-                                                        <select class="selectpicker with-border" name="status" data-size="7" title="Select Status" required>
-                                                            <option value="true" ${board.completed ? 'selected' : ''}>DONE</option>
-                                                            <option value="false" ${!board.completed ? 'selected' : ''}>NOT DONE</option>
-                                                        </select>
+                                                        <h5>BirthDate</h5>
+                                                        <input type="date" class="form-control" name="birthDate" id="birthDate" value="${user.birthDate}" required>
                                                     </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-xl-12">
-                                                <div class="submit-field">
-                                                    <h5>Select Background Image</h5>
-                                                    <div class="radio">
-                                                        <input id="bg-1" name="backgroundImage" type="radio" value="images/backgroundImage1.jpg" ${board.image == 'images/backgroundImage1.jpg' ? 'checked' : ''}>
-                                                        <label for="bg-1"><img src="images/backgroundImage1.jpg" alt="Background 1" width="100"></label>
-                                                    </div>
-
-                                                    <div class="radio">
-                                                        <input id="bg-2" name="backgroundImage" type="radio" value="images/backgroundImage2.jpg" ${board.image == 'images/backgroundImage2.jpg' ? 'checked' : ''}>
-                                                        <label for="bg-2"><img src="images/backgroundImage2.jpg" alt="Background 2" width="100"></label>
-                                                    </div>
-
-                                                    <div class="radio">
-                                                        <input id="bg-3" name="backgroundImage" type="radio" value="images/backgroundImage3.jpg" ${board.image == 'images/backgroundImage3.jpg' ? 'checked' : ''}>
-                                                        <label for="bg-3"><img src="images/backgroundImage3.jpg" alt="Background 3" width="100"></label>
-                                                    </div>
-
-                                                    <div class="radio">
-                                                        <input id="bg-4" name="backgroundImage" type="radio" value="images/backgroundImage4.jpg" ${board.image == 'images/backgroundImage4.jpg' ? 'checked' : ''}>
-                                                        <label for="bg-4"><img src="images/backgroundImage4.jpg" alt="Background 4" width="100"></label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="col-xl-12">
-                                                <div class="submit-field">
-                                                    <h5>Describe Your Project</h5>
-                                                    <textarea cols="30" rows="5" class="with-border" name="describe" required>${board.description}</textarea>
                                                 </div>
                                             </div>
 
@@ -368,14 +327,9 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-12" style="display:flex">
-                                <button type="submit" class="button ripple-effect big margin-top-30"><i class="icon-feather-plus"></i> Update a Board</button>
-                                <div>
-                                    <a href="board?boardID=${board.boardID}&action=deleteBoard" class="button ripple-effect big margin-top-30" style="background-color:red; margin-left: 10px"><i class="icon-feather-trash-2"></i> Remove</a>
-                                </div>
+                            <div class="col-xl-12">
+                                <button type="submit" class="button ripple-effect big margin-top-30"><i class="icon-feather-plus"></i> Update Account</button>
                             </div>
-
-
                         </form>
                         <!-- Snackbar -->
                         <div id="snackbar"></div>

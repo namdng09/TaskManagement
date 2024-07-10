@@ -29,6 +29,13 @@ public class User {
     public User() {
     }
 
+    public User(String userUID, String firstName, String lastName, Date birthDate) {
+        this.userUID = userUID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+    }
+
     public User(String userUID, String username, String email, String firstName, String lastName) {
         this.userUID = userUID;
         this.username = username;
@@ -356,5 +363,15 @@ public class User {
             System.out.println("ERROR: " + e.getMessage());
         }
         return listUsers;
+    }
+
+    public void editUserProfile(User user) {
+        UserDAO userDAO = new UserDAO();
+        try {
+            userDAO.updateUser(user);
+        } catch (SQLException e) {
+            //TODO: handle exception
+            System.out.println("ERROR: " + e.getMessage());
+        }
     }
 }
