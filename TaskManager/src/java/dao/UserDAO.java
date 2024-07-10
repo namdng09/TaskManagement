@@ -15,17 +15,14 @@ import model.User;
 public class UserDAO {
 
     public void updateUser(User user) throws SQLException {
-        String query = "UPDATE [dbo].[User] SET[UserName] =  ?, "
-                + "[Email] = ?, [FirstName] = ?, [LastName] = ? "
-                + "[BirthDate] = ?, [Phone] = ? "
+        String query = "UPDATE [dbo].[User] SET [FirstName] = ?, [LastName] = ?, "
+                + "[BirthDate] = ? "
                 + "WHERE[User_UID] =  ? ";
         PreparedStatement pstmt = createPreparedStatement(query);
-        pstmt.setString(1, user.getUsername());
-        pstmt.setString(2, user.getEmail());
-        pstmt.setString(3, user.getFirstName());
-        pstmt.setString(4, user.getLastName());
-        pstmt.setDate(5, user.getBirthDate());
-        pstmt.setString(6, user.getUserUID());
+        pstmt.setString(1, user.getFirstName());
+        pstmt.setString(2, user.getLastName());
+        pstmt.setDate(3, user.getBirthDate());
+        pstmt.setString(4, user.getUserUID());
 
         pstmt.executeUpdate();
     }
