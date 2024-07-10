@@ -56,6 +56,10 @@
         <servlet-name>ManagerServlet</servlet-name>
         <servlet-class>controller.ManagerServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SettingServlet</servlet-name>
+        <servlet-class>controller.SettingServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -91,5 +95,9 @@
     <servlet-mapping>
         <servlet-name>ManagerServlet</servlet-name>
         <url-pattern>/manager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingServlet</servlet-name>
+        <url-pattern>/setting</url-pattern>
     </servlet-mapping>
 </web-app>
